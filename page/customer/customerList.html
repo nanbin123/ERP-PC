@@ -1,0 +1,430 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../plugins-2.5.5/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="../../css/global.css" media="all">
+    <link rel="stylesheet" href="../../css/table.css" />
+
+
+  <style type="text/css">
+      .layui-fluid{
+          padding: 0;
+          margin:0;
+      }
+      .layuiadmin-card-header-auto{
+          margin-top: 15px;
+          height: auto;
+      }
+      .layui-card-header {
+          padding: 15px 15px;
+          border-bottom: 1px solid #f6f6f6;
+      }
+      .layui-card-body{
+          padding:0;
+      }
+      .layui-table-view{
+          border-width: 0;
+          margin: 0;
+      }
+      .layui-table-header{
+          background-color: #1ab394;
+      }
+      .layui-table thead tr {
+          background-color: #1ab394;
+      }
+      .layui-table thead tr span{
+          color: #fff;
+          font-weight: 600;
+      }
+      .layui-table-click{
+          background-color: transparent;
+      }
+      .layui-table tbody tr:hover {
+          background-color: transparent;
+      }
+      .layui-table-hover{
+          background-color: transparent;
+      }
+      .layui-table thead tr span{
+          font-weight:bold;
+      }
+
+
+
+   .info li {
+          min-width: 130px;
+          height: 32px;
+          line-height: 32px;
+          border-radius: 20px;
+          padding: 0 10px;
+          color: #fff;
+          text-align: center;
+          background: #1ab394;
+          display: inline-block;
+      }
+
+    .follow{
+        text-align: center;
+        color: #23c6c8;
+        cursor: pointer;
+        margin-right: 7px;
+    }
+      .order{
+           text-align: center;
+           color: rgb(248, 111, 92);
+           cursor: pointer;
+           margin-right: 7px;
+       }
+      .offer{
+          text-align: center;
+          color:  #ffaa17;
+          cursor: pointer;
+          margin-right: 7px;
+      }
+
+        /*tab*/
+      .layui-layer .layui-layer-title {
+          padding: 0 0 0 0;
+      }
+      .layui-layer .layui-layer-title span {
+          width:44%;
+          max-width: 44% !important;
+      }
+
+
+      /*到店记录输入内容*/
+      #arrivalRecord {
+          min-height: 0;
+          height: 70px;
+          width: 220px;
+          padding: 8px;
+          box-sizing: border-box;
+      }
+      /*//和上面的css一样只是为了加大权重*/
+      #tailafterRecord{
+            min-height: 0;
+            height: 70px;
+            width: 220px;
+            padding: 8px;
+            box-sizing: border-box;
+      }
+
+
+      .input-sm {
+          border: 1px solid #e5e6e7 !important;
+          border-radius: 1px;
+          height: 30px;
+          line-height: 1.5;
+      }
+      .btn-danger {
+          background-color: #ED5565;
+          border-color: #ED5565;
+          color: #FFF;
+          border-radius: 3px;
+          font-size: 14px;
+          height: 30px;
+          line-height: 22px;
+          display: inline-block;
+          padding: 4px 18px;
+          margin-left: 15px;
+      }
+
+
+  </style>
+</head>
+
+<body>
+
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header layuiadmin-card-header-auto">
+            <form  id="selecCustomerForm" class="layui-form" action="" lay-filter="selectFinanceForm">
+                <div class="layui-inline">
+                    <label class="layui-form-label">客户姓名:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="id" placeholder="请输入客户姓名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">客户电话:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="id" placeholder="请输入客户电话" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">客户地址:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="id" placeholder="请输入客户地址" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button id="customerQuery" class="layui-btn" lay-submit="" lay-filter="LAY-custoner-front-search">
+                        <i class="layui-icon layui-icon-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+
+
+
+        <div class="layui-card-body">
+           <div style="padding: 10px 10px 0 10px;">
+                    <ul class="info">
+                      <li>客户数量:100</li>
+                      <li>成交数量:20</li>
+                    </ul>
+                </div>
+
+            <table id="customer-table" class="layui-table"  lay-skin="nob"  lay-filter="customer"></table>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript" src="../../plugins-2.5.5/layui/layui.js"></script>
+
+<script>
+    layui.config({
+        base: '../../js/'
+    })
+layui.use(['table','jquery','layer','laydate','cookie','form','element','common'], function(){
+    var $= layui.jquery;
+    var table = layui.table;
+    var laydate = layui.laydate;
+    var cookie=layui.cookie;
+    var common = layui.common;
+    var form = layui.form;
+    var element = layui.element;
+    //“方法级渲染”配置方式
+    table.render({
+        elem: '#customer-table'
+        ,cellMinWidth: 140
+        ,skin:"nob"
+        ,size:"lg"
+        ,height:'full-72'
+        ,even:"true"
+        ,url: common.address +  "customer/selectCustOmer"
+        ,page: true //开启分页
+        ,where: {sessionid: $.cookie("sessionid")}
+        ,method: 'post'
+        ,parseData: function(res){} //res 即为原始返回的数据
+        ,cols: [[ //表头
+         {field:'customerName', align: 'center', title: '客户姓名'}
+        ,{field: 'customerPhone', align: 'center', title: '客户电话'}
+        ,{field:'customerAddress', align: 'center', title: '客户地址',width:'300'}
+        ,{field: '', align: 'center', title: '预购时间'}
+        ,{field: 'dataDictionaryName', align: 'center', title: '业务员'}
+        ,{field: 'yearMosDay', align: 'center', title: '创建时间'}
+        ,{field: 'remark', align: 'center', title: '备注'}
+        ,{fixed: 'right', title: '操作',  align:'center',width:'220', toolbar: '#toVoid'}
+    ]]
+    });
+
+
+    //监听工具条
+    table.on('tool(customer)', function(obj){
+        var data = obj.data;
+        var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+        var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+        if(obj.event === 'follow'){
+            //tab层
+            layer.tab({
+                area: ['910px', '495px'],
+                tab: [{
+                    title: data.customerName+'到店记录'
+                    ,content:$('#arrive').html()
+                }, {
+                    title: data.customerName+'跟踪记录'
+                    ,content:$('#tailafter').html()
+                }]
+            });
+            <!--到店记录-->
+            table.render({
+                elem: '#arrival-table'
+                ,cellMinWidth: 140
+                ,skin:"nob"
+                ,size:"lg"
+                ,height:'350px'
+                ,limit: 5
+                ,even:"true"
+                ,url: common.address +  "customer/selectCustomerTAByid"
+                ,page: true //开启分页
+                ,where: {sessionid: $.cookie("sessionid"),id:"6b82b5a0776b416ba275f8f0b134efe6","arrivalType":"arrival"}
+                ,method: 'post'
+                ,parseData: function(res){} //res 即为原始返回的数据
+                ,cols: [[ //表头
+                    {field:'customerName', align: 'center', title: '跟进人',width:120}
+                    ,{field: 'arrivalTime', align: 'center', title: '到店时间',width:120}
+                    ,{field: 'arrivalLength', align: 'center', title: '停留时间(分钟)',width:125}
+                    ,{field:'arrivalRecord', align: 'center', title: '内容',width:435}
+                    ,{fixed: 'right', title: '操作',  align:'center',width:'110', toolbar: '#toFollow'}
+                ]]
+            });
+
+            laydate.render({
+                elem: '#date'
+            });
+            laydate.render({
+                elem: '#tailafterdate'
+            });
+
+            form.on('submit(save)', function(data){
+                $.ajax({
+                    url: common.address + "customer/insertCustomerArrival?sessionid=" + $.cookie("sessionid"),
+                    type: "POST",
+                    data:{"customerId":"6b82b5a0776b416ba275f8f0b134efe6"
+                        ,"arrivalTime": data.field.arrivalTime
+                        ,"arrivalLength": data.field.arrivalLength
+                        ,"arrivalRecord":data.field.arrivalRecord},
+                    success: (res) => {
+                        table.reload('arrival-table', {
+                            url: common.address +  "customer/selectCustomerTAByid"
+                            ,where: {sessionid: $.cookie("sessionid")} //设定异步数据接口的额外参数
+                            ,page: {
+                                curr: 1 //重新从第 1 页开始
+                            }
+                        })
+
+                    }
+                })
+                return false;
+
+            });
+
+            <!--跟进记录-->
+            table.render({
+                elem: '#tailafter-table'
+                ,cellMinWidth: 140
+                ,skin:"nob"
+                ,size:"lg"
+                ,height:'350px'
+                ,limit: 5
+                ,even:"true"
+                ,url: common.address +  "customer/selectCustomerTAByid"
+                ,page: true //开启分页
+                ,where: {sessionid: $.cookie("sessionid"),id:"6b82b5a0776b416ba275f8f0b134efe6","arrivalType":"tailafter"}
+                ,method: 'post'
+                ,parseData: function(res){} //res 即为原始返回的数据
+                ,cols: [[ //表头
+                    {field:'customerName', align: 'center', title: '跟进人',width:120}
+                    ,{field: 'arrivalTime', align: 'center', title: '跟踪时间',width:120}
+                    ,{field: 'arrivalLength', align: 'center', title: '跟踪时长(分钟)',width:125}
+                    ,{field:'arrivalRecord', align: 'center', title: '内容',width:435}
+                    ,{fixed: 'right', title: '操作',  align:'center',width:'110', toolbar: '#toFollow'}
+                ]]
+            });
+        }
+    });
+
+
+/*    element.on('tab(demo)', function(data){
+       alert(JSON.stringify(data))
+    });*/
+
+
+
+
+
+
+});
+
+</script>
+
+<!--作废-->
+<script type="text/html" id="toVoid">
+    <span class="follow" lay-event="follow">跟进记录</span>
+    <span class="order" lay-event="order">转订单</span>
+    <span class="offer" lay-event="offer">报价</span>
+    <span class="details" lay-event="details">修改</span>
+</script>
+<!--到店记录-->
+<script type="text/html" id="toFollow">
+    <span class="edit" lay-event="edit">修改</span>
+    <span class="del" lay-event="del">删除</span>
+</script>
+<!--到店记录-->
+<script type="text/html" id="arrive">
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header layuiadmin-card-header-auto" style="padding: 0 15px;border-bottom: 0;">
+                <form  class="layui-form" >
+                    <div class="layui-inline">
+                        <textarea id="arrivalRecord" type="text" name="arrivalRecord" placeholder="请填写跟进内容（最多500字）" autocomplete="off" class="layui-textarea "></textarea>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label" style="line-height: 10px;width: 60px; padding: 9px 10px;">到店时间:</label>
+                        <div class="layui-input-block" style="width: 100px;margin-left: 80px;">
+                            <input type="text" name="arrivalTime" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input input-sm">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label" style="line-height: 10px;width: 60px; padding: 9px 10px;">停留时间:</label>
+                        <div class="layui-input-block"style="width: 100px;margin-left: 80px;">
+                            <input type="text" name="arrivalLength"  placeholder="分钟" autocomplete="off" class="layui-input input-sm">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label" style="line-height: 10px;width: 60px; padding: 9px 10px;">跟进人:</label>
+                        <div class="layui-input-block"style="width: 100px;margin-left: 80px;">
+                            <input type="text"  autocomplete="off" class="layui-input input-sm">
+                        </div>
+                    </div>
+                    <button lay-submit  lay-filter="save" class="layui-btn layui-btn-primary btn-danger" >添加</button>
+                </form>
+            </div>
+            <div class="layui-card-body">
+                <table id="arrival-table" class="layui-table"  lay-skin="nob"  lay-filter="arrival"></table>
+            </div>
+        </div>
+    </div>
+</script>
+<!--跟进内容-->
+<script type="text/html" id="tailafter">
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header layuiadmin-card-header-auto" style="padding: 0 15px;border-bottom: 0;">
+                <form  class="layui-form" >
+                    <div class="layui-inline">
+                        <textarea id="tailafterRecord" type="text" name="arrivalRecord" placeholder="请填写跟进内容（最多500字）" autocomplete="off" class="layui-textarea "></textarea>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label" style="line-height: 10px;width: 60px; padding: 9px 10px;">跟踪时间:</label>
+                        <div class="layui-input-block" style="width: 100px;margin-left: 80px;">
+                            <input type="text" name="arrivalTime" id="tailafterdate" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input input-sm">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label" style="line-height: 10px;width: 60px; padding: 9px 10px;">跟踪时常:</label>
+                        <div class="layui-input-block"style="width: 100px;margin-left: 80px;">
+                            <input type="text" name="arrivalLength"  placeholder="分钟" autocomplete="off" class="layui-input input-sm">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label" style="line-height: 10px;width: 60px; padding: 9px 10px;">跟进人:</label>
+                        <div class="layui-input-block"style="width: 100px;margin-left: 80px;">
+                            <input type="text"  autocomplete="off" class="layui-input input-sm">
+                        </div>
+                    </div>
+                    <button lay-submit  lay-filter="save" class="layui-btn layui-btn-primary btn-danger" >添加</button>
+                </form>
+            </div>
+            <div class="layui-card-body">
+                <table id="tailafter-table" class="layui-table"  lay-skin="nob"  lay-filter="tailafter"></table>
+            </div>
+        </div>
+    </div>
+
+</script>
+
+</body>
+
+</html>

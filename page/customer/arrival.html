@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../plugins-2.5.5/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="../../css/global.css" media="all">
+    <link rel="stylesheet" href="../../css/table.css" />
+
+
+  <style type="text/css">
+      .layui-fluid{
+          padding: 0;
+          margin:0;
+      }
+      .layuiadmin-card-header-auto{
+          margin-top: 15px;
+          height: auto;
+      }
+      .layui-card-header {
+          padding: 15px 15px;
+          border-bottom: 1px solid #f6f6f6;
+      }
+      .layui-card-body{
+          padding:0;
+      }
+
+
+/*到店记录输入内容*/
+      #arrivalRecord {
+          min-height: 0;
+          height: 70px;
+          width: 220px;
+          padding: 8px;
+          box-sizing: border-box;
+      }
+      .input-sm {
+          border: 1px solid #e5e6e7 !important;
+          border-radius: 1px;
+          height: 30px;
+          line-height: 1.5;
+      }
+      .btn-danger {
+          background-color: #ED5565;
+          border-color: #ED5565;
+          color: #FFF;
+          border-radius: 3px;
+          font-size: 14px;
+          height: 30px;
+          line-height: 22px;
+          display: inline-block;
+          padding: 4px 18px;
+          margin-left: 15px;
+      }
+  </style>
+</head>
+
+<body>
+
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header layuiadmin-card-header-auto">
+            <form  id="selecCustomerForm" class="layui-form" >
+                <div class="layui-inline">
+                    <textarea id="arrivalRecord" type="text" name="arrivalRecord" placeholder="请填写跟进内容（最多500字）" autocomplete="off" class="layui-textarea "></textarea>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" style="line-height: 10px;width: 60px; padding: 9px 10px;">到店时间:</label>
+                    <div class="layui-input-block" style="width: 100px;margin-left: 80px;">
+                        <input type="text" name="arrivalTime" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input input-sm">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" style="line-height: 10px;width: 60px; padding: 9px 10px;">停留时间:</label>
+                    <div class="layui-input-block"style="width: 100px;margin-left: 80px;">
+                        <input type="text" name="arrivalLength"  placeholder="分钟" autocomplete="off" class="layui-input input-sm">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" style="line-height: 10px;width: 60px; padding: 9px 10px;">跟进人:</label>
+                    <div class="layui-input-inline" style="width: 100px">
+                        <select name="arrivalUserid"  lay-filter="aihao" >
+                            <option value=""></option>
+                            <option value="0">张三</option>
+                            <option value="1">李四</option>
+                        </select>
+                    </div>
+                </div>
+                    <button lay-submit  lay-filter="save" class="layui-btn layui-btn-primary btn-danger" >添加</button>
+            </form>
+        </div>
+        <div class="layui-card-body">
+            <table id="arrival-table" class="layui-table"  lay-skin="nob"  lay-filter="arrival"></table>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript" src="../../plugins-2.5.5/layui/layui.js"></script>
+
+<script>
+    layui.config({
+        base: '../../js/'
+    })
+layui.use(['table','jquery','layer','laydate','cookie','form','common'], function(){
+    var $= layui.jquery;
+    var table = layui.table;
+    var laydate = layui.laydate;
+    var cookie=layui.cookie;
+    var common = layui.common;
+    var form = layui.form;
+    //“方法级渲染”配置方式
+    table.render({
+        elem: '#arrival-table'
+        ,cellMinWidth: 140
+        ,skin:"nob"
+        ,size:"lg"
+        ,height:'full-72'
+        ,even:"true"
+        ,url: common.address +  "customer/selectCustomerTAByid"
+        ,page: true //开启分页
+        ,where: {sessionid: $.cookie("sessionid"),id:"6b82b5a0776b416ba275f8f0b134efe6"}
+        ,method: 'post'
+        ,parseData: function(res){} //res 即为原始返回的数据
+        ,cols: [[ //表头
+         {field:'customerName', align: 'center', title: '跟进人'}
+        ,{field: 'arrivalTime', align: 'center', title: '到店时间'}
+         ,{field: 'arrivalLength', align: 'center', title: '停留时间(分钟)'}
+        ,{field:'arrivalRecord', align: 'center', title: '内容'}
+        ,{fixed: 'right', title: '操作',  align:'center',width:'110', toolbar: '#toFollow'}
+    ]]
+    });
+
+    //日期
+    laydate.render({
+        elem: '#date'
+    });
+
+
+    //监听工具条
+    table.on('tool(arrival)', function(obj){
+        var data = obj.data;
+        var layEvent = obj.event;
+        var tr = obj.tr;
+
+    });
+
+
+    form.on('submit(save)', function(data){
+        $.ajax({
+            url: common.address + "customer/insertCustomerArrival?sessionid=" + $.cookie("sessionid"),
+            type: "POST",
+            data:{"customerId":"6b82b5a0776b416ba275f8f0b134efe6"
+                ,"arrivalTime": data.field.arrivalTime
+                ,"arrivalLength": data.field.arrivalLength
+                ,"arrivalRecord":data.field.arrivalRecord},
+            success: (res) => {
+                alert(JSON.stringify(res))
+                table.reload('arrival-table', {
+                    url: common.address +  "customer/selectCustomerTAByid"
+                    ,where: {sessionid: $.cookie("sessionid")} //设定异步数据接口的额外参数
+                    ,page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                })
+
+            }
+        })
+        return false;
+
+    });
+
+
+
+
+
+});
+
+</script>
+
+
+<script type="text/html" id="toFollow">
+    <span class="edit" lay-event="edit">修改</span>
+    <span class="del" lay-event="del">删除</span>
+</script>
+</body>
+
+</html>

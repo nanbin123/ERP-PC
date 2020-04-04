@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<title>登录</title>
+		<link rel="stylesheet" href="plugins-2.5.5/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="css/login.css" />
+	</head>
+
+	<body class="beg-login-bg">
+		<div class="beg-login-box">
+			<header>
+				<h1>E管家登录</h1>
+			</header>
+			<div class="beg-login-main">
+				<form action="#" class="layui-form" method="post">
+					<div class="layui-form-item">
+						<label class="beg-login-icon">
+                        <i class="layui-icon">&#xe612;</i>
+                    </label>
+						<input type="text" name="username" lay-verify="username" autocomplete="off" placeholder="这里输入手机号" class="layui-input" value="13811765771">
+					</div>
+					<div class="layui-form-item">
+						<label class="beg-login-icon">
+                        <i class="layui-icon">&#xe642;</i>
+                    </label>
+						<input type="password" name="password" lay-verify="password" autocomplete="off" placeholder="这里输入密码" class="layui-input" value="qwe123456">
+					</div>
+					<div class="layui-form-item">
+						<div class="beg-pull-left beg-login-remember">
+							<label>记住帐号？</label>
+							<input type="checkbox" name="rememberMe" value="true" lay-skin="switch" checked title="记住帐号">
+						</div>
+						<div class="beg-pull-right">
+							<button class="layui-btn layui-btn-primary" lay-submit lay-filter="login">
+                            <i class="layui-icon">&#xe650;</i> 登录
+                        </button>
+						</div>
+						<div class="beg-clear"></div>
+					</div>
+				</form>
+			</div>
+			<footer>
+				<p>Beginner © </p>
+			</footer>
+		</div>
+		<script type="text/javascript" src="plugins-2.5.5/layui/layui.js"></script>
+		<script>
+			layui.config({
+		        base: 'js/'
+		    })
+			layui.use(['layer', 'form','cookie','common'], function() {
+				var layer = layui.layer;
+				var $ = layui.jquery;
+				var form = layui.form;
+				var common = layui.common;
+			//自定义验证规则
+			  form.verify({
+			    username: function(value){
+			      if(value.length < 11){
+			        return '用户名少得11位手机号啊';
+			      }
+			    }
+			    ,password: [
+			      /^[\S]{6,12}$/
+			      ,'密码必须6到12位，且不能出现空格'
+			    ]
+			    ,content: function(value){
+			      //layedit.sync(editIndex);
+			    }
+			  });
+
+				form.on('submit(login)',function(data){					
+					$.ajax({
+						url: common.address + "main/login",
+						type: "post",
+						dataType: "json",
+						data: {
+							"username": data.field.username,
+							"password": data.field.password
+						},
+						success: function(data) {													
+							if(data.state == 200) {
+								$.cookie("sessionid", data.sessionid);
+								$.cookie("uasername", data.username);
+								$.cookie("phone", data.phone);
+								layer.msg('登录成功'); 
+								location.href='index.html';
+							} else if(data.state == 0) {								
+								layer.msg('用户账号或密码不正确'); 
+							}
+						}
+					});
+					
+					//
+					return false;
+				});
+			});
+		</script>
+	</body>
+
+</html>

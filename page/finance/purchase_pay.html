@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../plugins/layui/css/layui.css"  media="all">
+    <link rel="stylesheet" href="../../css/table.css" />
+     <link rel="stylesheet" href="../../css/finance/finance.css" />
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+   <link rel="stylesheet" href="../../css/global.css" media="all">
+    <!--<link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">-->
+  <!--    -->
+  <style type="text/css">
+    fieldset {
+     min-width: inherit; 
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="admin-main">
+
+    <blockquote class="layui-elem-quote" style="overflow: hidden;">
+
+        <div class="btn_search">
+            <input type="text" placeholder="按创建时间查询"/>
+        </div>
+        <div class="selectBtn" id="search">查询</div>
+    </blockquote>
+<fieldset class="layui-elem-field">
+    <legend>数据列表</legend>
+    <div class="layui-field-box"> 
+            <table id="finance-table" class="layui-table"  lay-filter="demo">
+
+            </table>
+       </div>
+</fieldset>
+ 
+ </div> 
+          
+<script src="../../plugins/layui/layui.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.config({
+        base: '../../plugins/layui/modules/'
+    }).extend({ //设定模块别名
+        cookie: 'cookie'  // 如果cookie.js是在根目录，也可以不用设定别名,因为我cookie.js的是在根目录，所以这句话其实也不用写也行。
+    });
+layui.use(['table','jquery','layer','cookie'], function(){
+    var $= layui.jquery;
+    var table = layui.table;
+    var cookie=layui.cookie;
+    //“方法级渲染”配置方式
+    table.render({
+        elem: '#finance-table'
+        ,height:'full-177'
+
+        ,url: "http://101.132.155.107:8080/new_product/purchase/selectPayment"
+        ,page: true //开启分页
+        ,where: {sessionid: $.cookie("sessionid"), billName: "租金"} //如果无需传递额外参数，可不加该参数
+        ,method: 'post' //如果无需自定义HTTP类型，可不加该参数
+        ,request: {
+            pageName:'pageNo' //页码的参数名称，默认：page
+            ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+        } //如果无需自定义请求参数，可不加该参数
+        ,parseData: function(res){ //res 即为原始返回的数据
+            return {
+                "code": 0, //解析接口状态
+                "msg": "数据加载成功", //解析提示文本
+                "count": res.total, //解析数据长度数据总数
+                "data": res.list //解析数据列表
+        };
+        }
+        ,cols: [[ //表头
+         {field:'customerName', title: '客户姓名'}
+        ,{field: 'purchaseNumber', title: '采购单号'}
+        ,{field:'createDate', title: '创建时间'}
+        ,{field: 'number', title: '数量'}
+        ,{field: 'storefrontNmae', title: '店面'}
+        ,{field: 'orderNumber', title: '关联订单号'}
+        ,{field: 'purchaseMoney', title: '采购金额'}
+        ,{field: 'paymentMoney', title: '已付金额'}
+        ,{fixed: 'right', title: '操作', width:80, align:'center', toolbar: '#barDemo'}
+    ]]
+    });
+    $('#create_Btn_Product').on('click', function() {
+      alert($.cookie("sessionid"));
+    });
+
+
+  //监听工具条
+  table.on('tool(demo)', function(obj){
+    var data = obj.data;
+    if(obj.event === 'edit'){
+        var index = layer.open({
+            type: 1,
+            title: ['产品类型', 'font-size:18px'],
+            area: ['850px', '500px'],
+            offset: ['10px', '100px'],
+            content: ' <div class="popup-content">' +
+            '            <div class="infoText">' +
+            '                <h4 class="infoTitle">采购信息</h4>' +
+            '                <div class="infoCont">' +
+            '                    <div class="infoContMnt">' +
+            '                        客户姓名：' +
+            '                        <input type="text" class="customerName" value='+data.customerName+' onfocus=this.blur()>' +
+            '                    </div>' +
+            '                    <div class="infoContMnt leftMargin">\n' +
+            '                        数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量：' +
+            '                        <input type="text" class="totalProductNumber" value='+data.number+' onfocus=this.blur()>' +
+            '                    </div>\n' +
+            '                    <div class="infoContMnt leftMargin">\n' +
+            '                        创&nbsp;建&nbsp;时&nbsp;间：\n' +
+            '                        <input type="text" class="createDate" onfocus=this.blur()>\n' +
+            '                    </div>\n' +
+            '                    <div class="infoContMnt">\n' +
+            '                        采购单号：\n' +
+            '                        <input type="text" class="outWarehouseNumber" onfocus=this.blur()>\n' +
+            '                    </div>\n' +
+            '                    <div class="infoContMnt leftMargin">\n' +
+            '                        店&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;面：\n' +
+            '                        <input type="text" class="storefrontNmae" onfocus=this.blur()>\n' +
+            '                    </div>\n' +
+            '                    <div class="infoContMnt leftMargin">\n' +
+            '                        关联订单号：\n' +
+            '                        <input type="text" class="lineOrderNumber" onfocus=this.blur()>\n' +
+            '                    </div>\n' +
+            '                    <div class="infoContMnt">\n' +
+            '                        采购金额：\n' +
+            '                        <input type="text" class="actualmoney" onfocus=this.blur()>\n' +
+            '                    </div>\n' +
+            '                    <div class="infoContMnt leftMargin">\n' +
+            '                        已付金额：\n' +
+            '                        <input type="text" class="receivable" onfocus=this.blur()>\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '                <h4 class="infoTitleTwo">添加付款单</h4>\n' +
+            '                <div class="infoContTwo">\n' +
+            '                    <div class="infoContMnt">付款金额：<input type="number" class="fuJe"></div>\n' +
+            '                    <div class="infoContMnt leftMargin">付款说明：<input type="text" class="payment"></div>\n' +
+            '                    <div class="infoContMnt leftMargin">\n' +
+            '                        付&nbsp;款&nbsp;方&nbsp;式：\n' +
+            '                        <select name="" id="" class="infoSelect">\n' +
+            '                            <option value="" disabled selected hidden>请选择</option>\n' +
+            '                            <option value="微信">微信</option>\n' +
+            '                            <option value="银行卡">银行卡</option>\n' +
+            '                            <option value="支付宝">支付宝</option>\n' +
+            '                            <option value="信用卡">信用卡</option>\n' +
+            '                            <option value="网银">网银</option>\n' +
+            '                            <option value="现金">现金</option>\n' +
+            '                        </select>\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '                <div class="imgFile">\n' +
+            '                    <label>\n' +
+            '                        <span></span>\n' +
+            '                        <input type="file" class="file">\n' +
+            '                    </label>\n' +
+            '                </div>\n' +
+            '                <div class="sublimtBtn">保存</div>\n' +
+            '            </div>\n' +
+            '        </div>'
+        });
+        $(".sublimtBtn").on('click', function () {
+            layer.close(index);
+            layui.table.reload('finance-table');//重载父页表格，参数为表格ID
+        });
+    }
+  });
+
+
+
+});
+</script>
+<script type="text/html" id="barDemo">  
+  <a class="layui-btn layui-btn-xs" style="background-color: #FFAA17;" lay-event="edit">付款</a>
+</script>
+
+</body>
+
+</html>

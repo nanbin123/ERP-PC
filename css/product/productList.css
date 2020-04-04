@@ -1,0 +1,14 @@
+
+
+.query button {
+    width: 100px;
+    height: 38px;
+    background: #fff;
+    border: 2px solid #dcdfe6;
+    border-radius: 20px;
+    color: #999999;
+    font-size: 15px;
+    cursor: pointer;
+    outline: none;
+    line-height:15px;
+}

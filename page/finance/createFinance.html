@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+        <title></title>
+        <link rel="stylesheet" href="../../plugins-2.5.5/layui/css/layui.css" media="all" />
+        <link rel="stylesheet" href="../../css/global.css" media="all">
+        <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+    <style>
+
+    </style>
+      
+</head>
+
+
+
+<body>
+
+        <form  id="addFinanceForm" class="layui-form" style="padding: 20px 0 0 0">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">日期:</label>
+                        <div class="layui-input-inline">
+                            <input   id="yearMonthDay" name="yearMosDay" type="text" name="time" lay-verify="required" lay-reqtext="费用产生时间是必填项" placeholder="请选择费用产生时间" class="layui-input">
+                        </div>
+                    </div>
+                    <div  class="layui-inline">
+                        <label class="layui-form-label">类型:</label>
+                        <div class="layui-input-inline">
+                            <select name="dataDictionaryId"   id="financeTypeName"  lay-verify="required" lay-reqtext="类型是必填项">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">名称:</label>
+                    <div class="layui-input-inline">
+                        <input  type="text" name="name" placeholder="请输入费用名称" lay-verify="required" lay-reqtext="费用名称是必填项" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">金额:</label>
+                    <div class="layui-input-inline" style="margin-right: 0;width: 95px">
+                        <input  id="addMoney"  lay-verify="addOrReduceMoney"  type="text" name="moneya" placeholder="收入金额" class="layui-input" style="border-radius: 2px 0 0 2px " >
+                    </div>
+                    <div class="layui-input-inline" style="margin-right: 0;width: 95px">
+                        <input id="reduceMoney"  lay-verify="addOrReduceMoney"  type="text" name="moneyb" placeholder="支出金额" class="layui-input" style="border-radius: 0 2px 2px 0;border-left: 0">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">数量:</label>
+                    <div class="layui-input-inline">
+                        <input  type="text" name="number" placeholder="请输入费用数量默认为1" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item  layui-form-text">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <textarea name="remark" placeholder="请输入备注信息" class="layui-textarea" style="width: 65%"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item  layui-hide">
+                <input type="button" lay-submit lay-filter="LAY-finance-front-submit" id="LAY-finance-front-submit" value="确认">
+            </div>
+        </form>
+
+
+
+    <script type="text/javascript" src="../../plugins-2.5.5/layui/layui.js"></script>
+
+    <script>
+   
+        layui.config({//自定义模块路径
+            base: '../../js/'
+        })
+        layui.use(['table','jquery','layer','cookie','form','element','laydate'], function(){
+             var $= layui.jquery;
+             var cookie=layui.cookie;
+             var form = layui.form;
+             var element = layui.element;
+             var laydate = layui.laydate;
+            var common = parent.layui.common;
+            $(document).ready(function () {
+                 getDataList();
+            });
+            //初始化elect   operation 选项
+            function getDataList() {
+                 // 请求
+                $.ajax({
+                   type:'POST',
+                    url:  common.address + 'selectDataType',
+                   data: {
+                       "sessionid": $.cookie("sessionid"),
+                        type: 'finance'
+                   },
+                    success:function(response){
+                        var data=response.data;
+                        $('#type').empty();
+                        var content='<option value=""></option>';
+                        $.each(data,function(index,value){
+                            content+="<option value="+value.id+">"+value.name+"</option>";
+                        });
+                        $('#financeTypeName').append(content);
+                        form.render('select');
+                    }
+                })
+            }
+
+
+
+
+
+            //日期选择器
+            laydate.render({
+                elem: '#yearMonthDay'
+                //,type: 'date' //默认，可不填
+            });
+            $("#addMoney").bind('input propertychange', function () {
+                $('#reduceMoney').val("");
+            });
+            $("#reduceMoney").bind('input propertychange', function () {
+                $('#addMoney').val("");
+            });
+
+            //创建一个编辑器
+            //var editIndex = layedit.build('LAY_demo_editor');
+            //自定义验证规则
+           form.verify({
+                addOrReduceMoney: function(item){
+                    var reduceMoney = $('#reduceMoney').val();
+                    var addMoney = $('#addMoney').val();
+                    if(addMoney == ''&& reduceMoney == ''){
+                        return '收入和支出金额必须填写一项';
+                    }
+                }
+            });
+
+
+
+        })
+       /* form.verify({
+
+        });*/
+ 
+    </script>
+</body>
+</html>

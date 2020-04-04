@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>融恒科技—企业erp管理系统</title>
+    
+    <link rel="stylesheet" href="../../css/authorization/queryMan.css">
+  
+    <style>
+        .pagination ul li .imgSize{width: 12px; vertical-align: middle; margin-right: 2px;margin-left: 3px;vertical-align: middle;margin-top: -2px;}
+        .pagination ul li .leftjl{margin-left: 2px;vertical-align: middle;margin-top: -2px;}
+        .pagination ul .leftJl{margin-left: -10px;margin-right: 10px;}
+        .pagination ul .taishu {font-size: 15px;}
+    </style>
+    <style>
+        .tab-hd {overflow:hidden; zoom:1; margin-left: 100px;    height: 50px;}
+        .tab-hd .listTxt{ float:left; width:150px; height: 48px; line-height: 50px; text-align:center; cursor:pointer;margin-right: 70px;}
+        .tab-top .active{ border-bottom: 2px solid #7B7DE5;}
+        .tab-bd .listTxt{display:none; padding:20px;border-top:0 none; font-size:24px;}
+        .tab-bd .txtCont{display: none}
+        .tab-bd .thisclass{ display:list-item;}
+        .check{font-size: 16px;padding-left: 2%}
+    </style>
+</head>
+<body>
+    <div class="box">
+
+        
+        <div class="right">
+            <div class="operationMess">
+                <div class="messTop">
+                    <img src="img/left.png" class="back"> <span class="limits"> 权限管理</span>/开通权限
+                    <div class="tab-hd tab-top">
+                        <div class="listTxt active" id="pc-power" attrId='2'>PC权限</div>
+                        <div class="listTxt" id="app-power"  attrId='3'>APP权限</div>
+                        <div class="listTxt" id="xcx-power"  attrId='1'>小程序权限</div>
+                        <!--<div class="listTxt" >大权限</div>-->
+                    </div>
+                </div>
+                <div class="tab-bd">
+                    <!--PC权限-->
+                    <div class=" txtCont thisclass">
+                        <div class="staffMess"></div>
+                        <div class="gary"></div>
+                        <div class="AllJurisdiction" id="AllJurisdiction"></div>
+
+                    </div>
+                    <!--APP权限-->
+                    <div class="txtCont">
+                        <div class="staffMess"></div>
+                        <div class="gary"></div>
+                        <div class="AllJurisdiction" id="AllJurisdictionApp"></div>
+                    </div>
+
+                    <!--小程序权限-->
+                    <div class="txtCont">
+                        <div class="staffMess"></div>
+                        <div class="gary"></div>
+                        <div class="AllJurisdiction" id="xiaochengxu"></div>
+                    </div>
+                    <div class="titleMask">
+                        <div class="MaskMessage">
+                            <div class="close">X</div>
+                            <div class="mainOne">
+
+                            </div>
+                            <div class="confirm">确认</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="jq/jquery-3.3.1.min.js"></script>
+    <script src="jq/jquery.cookie.js"></script>
+    <script src="jq/main.js"></script>
+    <script>
+
+        (function(doc, win) {
+            var docEl = doc.documentElement, //html
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function() {
+                    var clientWidth = docEl.clientWidth;
+                    if(!clientWidth) return;
+                    docEl.style.fontSize = 16 / 375 * clientWidth + "px";
+                };
+            if(!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+            //DOMContentLoaded,就是当dom结构加载完毕就执行,比window.onload要快
+        })(document, window);
+
+        $(function(){
+            // window.history.forward(1)		//点击浏览器后退，禁止返回上一页
+        });
+        // menu()
+        $("body").delegate(".inaction","click",function(){
+            var mainId = $(this)[0].id;
+            sessionStorage.setItem("mainId",mainId);
+            sessionStorage.removeItem("subMainId")
+        });
+        $("body").delegate(".unSelect","click",function(){
+            var subId = $(this)[0].id;
+            sessionStorage.setItem("subMainId",subId)
+        });
+
+        $('#js_btn_search').click(function(){
+            AllUser();
+
+        })
+        var messList = [];
+        var isLoadPagePlugin = false;
+        function AllUser(){
+            $.ajax({
+                url: url + "/menu/selectUser",
+                method: "POST",
+                data: {
+                    "sessionid": sessionid,
+                    "pageNo":1,query:$('#txtKeyword').val().trim(),
+                    "pageSize":20
+                },
+                success: (res)=>{
+                    if (!isLoadPagePlugin) {
+
+                        isLoadPagePlugin = true;
+                        new Page({
+                            id: 'pagination',
+                            pageTotal: res.pages, //必填,总页数
+                            pageAmount: res.pageSize, //每页多少条
+                            dataTotal: res.total, //总共多少条数据
+                            curPage: 1, //初始页码,不填默认为1
+                            pageSize: 5, //分页个数,不填默认为5
+                            showPageTotalFlag: true, //是否显示数据统计,不填默认不显示
+                            showSkipInputFlag: true, //是否支持跳转,不填默认不显示
+                            getPage: function (page) {
+                                pageIndex = page;
+                                //获取当前页数
+                                AllUser(pageIndex);
+                            }
+                        })
+                        }
+                    console.log(res);
+                    if( res.state == 403 ){
+                        window.location.href=("index.html");
+                        return;
+                    }
+                    
+                    messList = res.list;
+                    var mess = "";
+                    $(".AllData").html('');
+                    if( res.state == -200 ){
+                        window.location.href="quanxian.html"
+                    }
+                    $.each(messList,function(n,value){
+                        var mm = "";
+                        mm += " <div class='DataOne' id='" + value.userid + "'>" +
+                            "<div class='Pname'>" + value.username + "</div>" +
+                            "<div class='Pname'>" + value.phone + "</div>" +
+                            "<div class='Pname'>" + value.position + "</div>" +
+                            "<div class='Pname'><img src='img/manage.png' class='handle'></div>" +
+                            "</div>";
+                        mess += mm;
+                    })
+                    $(".AllData").append(mess)
+                }
+            })
+        }
+        AllUser();
+
+        // PC权限接口调用
+
+        function selectLimits(userid){
+            var bb = [];
+            $("#AllJurisdiction").empty()
+            $.ajax({
+                url: url + "/menu/selectMenuUser",
+                method: "POST",
+                data: {
+                    "selectUserid":userid,
+                    "sessionid": sessionid,
+                    "isok":2
+                },
+                success: (res)=>{
+
+                    bb = res;
+                    for( var i=0;i<res.length;i++ ){
+                        if( res[i].parentId == "00" && res[i].name != '小程序管理'){
+
+                            $("#AllJurisdiction").append("<div class='check'>" + res[i].name + "</div><div class='jurisdictionOne' id='" + res[i].id + "'></div>")
+
+                        }
+                    }
+
+                    var ll = $("#AllJurisdiction").find('.jurisdictionOne')
+                    var rr = res;
+
+                    for( var j=0;j<ll.length;j++ ){
+
+                        for( var a=0;a<rr.length;a++ ){
+                            if( rr[a].parentId == ll[j].id ){
+                                var ssid = ll[j].id
+                                // console.log(ssid)
+                                if( rr[a].isChoice=="yes"){
+                                    $("#"+ssid).append("<div class='checkOne' id='" + rr[a].id + "'>" + rr[a].name + " <img src='img/chooseSuccess.png'> </div>")
+                                }else{
+                                    $("#"+ssid).append("<div class='checkOne' id='" + rr[a].id + "'>" + rr[a].name + " <img src='img/choose.png'> </div>")
+                                }
+                               
+                            }
+                        }
+                    }
+                }
+            })
+        }
+        // 小程序   
+        function selectXcxLimits(userid){
+            var bb = [];
+            $("#xiaochengxu").empty()
+            $.ajax({
+                url: url + "/menu/selectMenuUser",
+                method: "POST",
+                data: {
+                    "selectUserid":userid,
+                    "sessionid": sessionid,
+                    "isok":2
+                },
+                success: (res)=>{
+
+                    bb = res;
+                    for( var i=0;i<res.length;i++ ){
+                        if( res[i].parentId == "00" && res[i].name == '小程序管理'){
+
+                            $("#xiaochengxu").append("<div class='check'>" + res[i].name + "</div><div class='jurisdictionOne' id='" + res[i].id + "'></div>")
+
+                        }
+                    }
+
+                    var ll = $("#xiaochengxu").find('.jurisdictionOne')
+                    var rr = res;
+
+                    for( var j=0;j<ll.length;j++ ){
+
+                        for( var a=0;a<rr.length;a++ ){
+                            if( rr[a].parentId == ll[j].id ){
+                                var ssid = ll[j].id
+                                // console.log(ssid)
+                                if( rr[a].isChoice=="yes"){
+                                    $("#"+ssid).append("<div class='checkOne' id='" + rr[a].id + "'>" + rr[a].name + " <img src='img/chooseSuccess.png'> </div>")
+                                }else{
+                                    $("#"+ssid).append("<div class='checkOne' id='" + rr[a].id + "'>" + rr[a].name + " <img src='img/choose.png'> </div>")
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+        }
+        //APP权限接口调用
+
+        function selectAppLimits(userid){
+            var bb = [];
+            $("#AllJurisdictionApp").empty()
+            $.ajax({
+                url: url + "/menu/selectMenuUser",
+                method: "POST",
+                data: {
+                    "selectUserid":userid,
+                    "sessionid": sessionid,
+                    "isok":3
+                },
+                success: (res)=>{
+
+                    bb = res;
+                    for( var i=0;i<res.length;i++ ){
+
+                        if( res[i].parentId == "000" ){
+                            $("#AllJurisdictionApp").append("<div class='check'>" + res[i].name + "</div><div class='jurisdictionOne' id='" + res[i].id + "'></div>")
+
+                        }
+                    }
+
+                    var ll = $("#AllJurisdictionApp").find('.jurisdictionOne')
+                    console.log(ll)
+                    var rr = res;
+                    for( var j=0;j<ll.length;j++ ){
+
+                        for( var a=0;a<rr.length;a++ ){
+
+                            if( rr[a].parentId == ll[j].id ){
+                                console.log(1111)
+                                var ssid = ll[j].id
+                                // console.log(ssid)
+                                if( rr[a].isChoice=="yes"){
+                                    $("#"+ssid).append("<div class='checkOne' id='" + rr[a].id + "'>" + rr[a].name + " <img src='img/chooseSuccess.png'> </div>")
+                                }else{
+                                    $("#"+ssid).append("<div class='checkOne' id='" + rr[a].id + "'>" + rr[a].name + " <img src='img/choose.png'> </div>")
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+        }
+
+
+
+        //用户已经授权的列表
+        var accredit = [];
+        function jurisdiction( userid ){
+            $.ajax({
+                url: url + "/menu/getmenu",
+                method: "POST",
+                data: { "sessionid": sessionid, "userid": userid },
+                success: (res)=>{
+                    console.log(res)
+                    $(".staffMess").empty();
+                    $(".staffMess").append("<div class='staffName'>姓名：" + res.name + "</div><div class='staffName'>职位：" + res.position + "</div><div class='staffName'>电话：" + res.phone + "</div><div class='staffName'></div><button class='save'>保存</button>")
+                    accredit = res.list;
+                    var ll = $(".checkOne");
+                    for( var i=0;i<ll.length;i++ ){
+                        for( var j=0;j<accredit.length;j++ ){
+                            if( accredit[j].id == ll[i].id ){
+                                // console.log( accredit[j].id )
+                                $("#"+accredit[j].id).find('img').attr("src","img/chooseSuccess.png");
+                            }
+                        }
+                    }
+                }
+            })
+        }
+        function subMit( json ){
+            $.ajax({
+                url: url + "/menu/insertUserMenu",
+                method: "POST",
+                data: { "json": JSON.stringify(json), "sessionid": sessionid },
+                success: (res)=>{
+                    console.log(res)
+                    alert("保存成功");
+                    jurisdiction( userid )
+                    window.location.reload(); //刷新网页
+                }
+            })
+        }
+
+        var userid;
+        $("body").delegate(".handle","click",function(){
+            // console.log($(this).parent().parent()[0].id)
+            userid = $(this).parent().parent()[0].id;
+            selectLimits(userid);
+            $(".boxx").hide();
+            $(".operationMess").show();
+            jurisdiction( userid )
+        })
+        $("body").delegate("#app-power","click",function(){
+            // console.log($(this).parent().parent()[0].id)
+            //userid = $(this).parent().parent()[0].id;
+            if($("#AllJurisdictionApp").html()==""){
+                selectAppLimits(userid);
+            }
+            // selectAppLimits(userid);
+            $(".boxx").hide();
+            $(".operationMess").show();
+            jurisdiction( userid )
+        })
+        $("body").delegate("#xcx-power","click",function(){
+            // console.log($(this).parent().parent()[0].id)
+            //userid = $(this).parent().parent()[0].id;
+            if($("#xiaochengxu").html()==""){
+                 selectXcxLimits(userid);
+            }
+            // selectXcxLimits(userid);
+            $(".boxx").hide();
+            $(".operationMess").show();
+            jurisdiction( userid )
+        })
+        $("body").delegate(".remove","click",function(){
+            var vv = $(".num").val();
+            vv --;
+            if( vv < 1 ){
+                vv = 1;
+                $(".num").val(vv)
+            }
+            $(".num").val(vv);
+        })
+        $("body").delegate(".add","click",function(){
+            var vv = $(".num").val();
+            vv ++;
+            $(".num").val(vv)
+        })
+        $("body").delegate(".back","click",function(){
+            $(".boxx").show();
+            $(".operationMess").hide();
+            $(".checkOne").find('img').attr("src","img/choose.png")
+            $(".AllJurisdiction").empty();
+            $(".staffMess").empty();
+        })
+
+        $("body").delegate(".checkOne","click",function(){
+            var ss = $(this).find('img').attr("src");   //根据图片路径判断是否选中
+            if( ss == "img/choose.png" ){
+                $(this).find('img').attr("src","img/chooseSuccess.png");
+                // console.log($.trim($(this).text()))
+            } else {
+                $(this).find('img').attr("src","img/choose.png")
+            }
+        })
+        var chooseList = [];
+        var json = {};
+        $("body").delegate(".save","click",function(){
+            var list = [];
+            $(".txtCont").each(function() {
+                console.log($(this))
+                if(!$(this).is(':hidden')) {
+                    
+                    list= $(this).find(".checkOne");
+                }
+            })
+            console.log(list)
+            chooseList = [];
+            for( var i=0;i<list.length;i++ ){
+                // var ss = list[i].children[1].attributes[0].value;
+                var ss = list[i].children[0].getAttribute('src')
+                // console.log(list[i].children)
+                if( ss == "img/chooseSuccess.png" ){
+                    var dd = list[i].id;
+                    var pid = $("#"+dd).parent()[0].id
+                    chooseList.push(dd)
+                    // console.log($("#"+dd).parent()[0].id);
+                    $(".mainOne").append("<div class='subTitleOne'> <img src='img/chooseSuccess.png'>" + list[i].innerText + "</div>")
+
+                }
+            }
+            console.log(chooseList)
+            $(".titleMask").show();
+        })
+        $(".close").click(function(){
+            $(".titleMask").hide();
+            $(".subTitleOne").remove();
+        })
+        $("body").delegate(".confirm","click",function(){
+           var typeId=($(".tab-top .active").attr("attrId"))
+            json.isok = typeId;
+            json.selectUserid = userid;
+            json.menuid = chooseList;
+            subMit(json)
+            console.log( JSON.stringify(json) )
+
+
+            $(".checkOne").find('img').attr("src","img/choose.png");
+            $(".titleMask").hide();
+            $(".subTitleOne").remove();
+            
+        })
+
+
+        // 权限选型卡
+        $(function(){
+            function tabs(tabTit,on,tabCon){
+                $(tabTit).children().click(function(){
+                    $(this).addClass(on).siblings().removeClass(on);
+                    var index = $(tabTit).children().index(this);
+                    $(tabCon).children().eq(index).show().siblings().hide();
+                });
+            };
+            tabs(".tab-hd","active",".tab-bd");
+        });
+
+
+        // 退出登录
+        $(".userName").text($.cookie("username"))
+        $(".iphoneTxt").text($.cookie("phone"))
+        $(".loginTo").click(function () {
+            $.cookie('sessionid', sessionid, { expires: -1 }); // 删除 cookie
+            $.cookie('username', sessionid, { expires: -1 }); // 删除 username
+            $.cookie('phone', sessionid, { expires: -1 }); // 删除 phones
+            okPop("退出成功")
+            setTimeout (function(){
+                window.location.reload(); //刷新网页
+            },2000)
+            window.location.href="index.html"
+        })
+        $(".userBox").click(function () {
+            $(".tanBxo").toggle()
+        })
+
+
+    </script>
+</body>
+</html>

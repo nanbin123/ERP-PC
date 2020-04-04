@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+     <link rel="stylesheet" href="../../css/finance/finance.css" />
+</head>
+<body>
+            <!-- 去付款弹出的窗口 -->
+        <div class="popup-content">          
+            <div class="infoText">
+                <h4 class="infoTitle">采购信息</h4>
+                <div class="infoCont">
+                    <div class="infoContMnt">
+                        客户姓名：
+                        <input type="text" class="customerName" onfocus=this.blur()>
+                    </div>
+                    <div class="infoContMnt leftMargin">
+                        数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量：
+                        <input type="text" class="totalProductNumber" onfocus=this.blur()>
+                    </div>
+                    <div class="infoContMnt leftMargin">
+                        创&nbsp;建&nbsp;时&nbsp;间：
+                        <input type="text" class="createDate" onfocus=this.blur()>
+                    </div>
+                    <div class="infoContMnt">
+                        采购单号：
+                        <input type="text" class="outWarehouseNumber" onfocus=this.blur()>
+                    </div>
+                    <div class="infoContMnt leftMargin">
+                        店&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;面：
+                        <input type="text" class="storefrontNmae" onfocus=this.blur()>
+                    </div>
+                    <div class="infoContMnt leftMargin">
+                        关联订单号：
+                        <input type="text" class="lineOrderNumber" onfocus=this.blur()>
+                    </div>
+                    <div class="infoContMnt">
+                        采购金额：
+                        <input type="text" class="actualmoney" onfocus=this.blur()>
+                    </div>
+                    <div class="infoContMnt leftMargin">
+                        已付金额：
+                        <input type="text" class="receivable" onfocus=this.blur()>
+                    </div>
+                </div>
+                <h4 class="infoTitleTwo">添加付款单</h4>
+                <div class="infoContTwo">
+                    <div class="infoContMnt">付款金额：<input type="number" class="fuJe"></div>
+                    <div class="infoContMnt leftMargin">付款说明：<input type="text" class="payment"></div>
+                    <div class="infoContMnt leftMargin">
+                        付&nbsp;款&nbsp;方&nbsp;式：
+                        <select name="" id="" class="infoSelect">
+                            <option value="" disabled selected hidden>请选择</option>
+                            <option value="微信">微信</option>
+                            <option value="银行卡">银行卡</option>
+                            <option value="支付宝">支付宝</option>
+                            <option value="信用卡">信用卡</option>
+                            <option value="网银">网银</option>
+                            <option value="现金">现金</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="imgFile">
+                    <label>
+                        <span></span>
+                        <input type="file" class="file">
+                    </label>
+                </div>
+                <div class="sublimtBtn">保存</div>
+            </div>
+        </div>
+
+
+</body>
+</html>

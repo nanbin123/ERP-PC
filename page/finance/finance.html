@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>融恒科技—企业erp管理系统</title>
+
+    <link rel="stylesheet" href="css/queryOrder1.css">
+    <link rel="stylesheet" href="jq/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/bootstrap.css"/>
+    <link rel="stylesheet" href="css/bootstrap-datetimepicker.css"/>
+    <link rel="stylesheet" href="css/userInfo.css">
+    <link rel="stylesheet" href="css/main.css">
+    <style type="text/css">
+        .remark,
+        #begin {
+            border-radius: 0 !important;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        ul li {
+            margin: 0;
+            padding: 0
+        }
+
+        #add_style {
+            justify-content: flex-start;
+            /* margin-bottom: 0.2rem; */
+        }
+
+        .sousuo ul {
+            list-style-type: none;
+            font-size: 0.2rem;
+            margin-left: 5%;
+            padding: 0px;
+            justify-content: flex-start;
+            width: 14%;
+            margin-top: 0.3rem;
+        }
+        .sousuo ul:nth-child(1){
+            margin-left: 10px;
+        }
+        .data {
+            border-top: 0.01rem solid #E4E7ED;
+        }
+
+        .delBtn {
+            color: red;
+            cursor: pointer
+        }
+
+        /* .dropdown-menu{
+                font-size: 0.2rem;
+                padding: 0.3rem;
+                box-sizing: border-box;
+                min-width: 15%;
+            }
+            .dropdown-menu td{
+                width: 0.4rem;
+            } */
+
+        .sousuo ul li {
+            color: #C6CDD9;
+            /* margin-left: 0.2rem; */
+            margin-bottom: 0.1rem;
+            /* text-indent: 10px; */
+        }
+
+        .Sure {
+            align-self: auto;
+            display: inline-block;
+            width: 2rem;
+        }
+
+        #add_style ul input {
+            height: 0.33rem;
+            background: rgba(0, 0, 0, 0);
+            /* border: 0.01rem solid #ccc; */
+            border-radius: 0;
+        }
+
+
+        #button {
+            width: 6%;
+            height: 45px;
+            line-height: 45px;
+            margin-top: 0.3rem;
+            background: #FFAA17;
+            margin-left: 3rem;
+            border-radius: 0.1rem;
+            position: absolute;
+    right: 2%;
+    top: -6%;
+            
+        }
+
+        .dataMess {
+            margin: 0px;
+            padding: 0.3rem 0;
+            box-sizing: border-box;
+        }
+
+        .dataMess ul {
+            float: left;
+            width: 100%;
+            margin: 0px;
+            padding: 0px;
+            color: #8D8D8D;
+            justify-content: flex-start;
+        }
+
+        .dataMess ul:nth-child(1) {
+            color: #000000;
+        }
+
+        .dataMess li {
+            display: inline-block;
+            text-align: center;
+            font-size: 15px;
+            width: 9.0909%;
+            word-wrap: break-word;
+        }
+
+        .dataMess img {
+            width: 0.4rem;
+            height: 0.45rem;
+            margin-left: -0.1rem;
+            margin-top: -0.1rem;
+        }
+
+        .dataMess .comment {
+            width: 8%;
+        }
+
+        .add {
+            width: 100%;
+            font-size: 0.2rem;
+            color: #C6CDD9;
+            padding: 0.05rem 2%;
+            box-sizing: border-box;
+            box-shadow: 0.06rem 0.06rem 0.16rem #dbe7ef;
+            /* display: flex; */
+            justify-content: space-between;
+        }
+        .prepare{
+            margin-left: 3%;
+            display: inline-block;
+        }
+        .menuu .title1 {
+            color: #7B7DE5;
+        }
+
+        .add span {
+            line-height: 0.9rem;
+            margin-left: 0.1rem;
+            float: left;
+        }
+
+        /* .add_date {
+            width: 5rem;
+        } */
+
+        .add_input {
+            height: 0.5rem;
+            float: left;
+            margin-top: 0.22rem;
+            text-align: center;
+        }
+
+        .prepare input {
+            margin-left: 0.1rem;
+            margin-top: 0px;
+            width: 3rem;
+            height: 0.43rem;
+        }
+
+        #begin {
+            width: 120px;
+            height: 0.43rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            line-height: 0.45rem;
+            outline: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        input {
+            outline: none;
+            box-shadow: none !important;
+        }
+
+        .add_input input {
+            border: none;
+            padding-left: 0.2rem;
+            box-sizing: border-box;
+            outline-style: none;
+            border: 0.01rem solid #ccc;
+        }
+
+        .add_left {
+            margin-top: 0.15rem;
+            display: flex;
+            height: 100%;
+            float: right;
+        }
+
+        .add_left div {
+            border-radius: 0.1rem;
+            border: 0.02rem solid #797BE4;
+            width: 1.2rem;
+            margin-left: 0.2rem;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+        }
+
+        .upload {
+            background: #797BE4;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+
+        .details {
+            color: #797BE4;
+            cursor: pointer;
+        }
+
+        .Line {
+            height: 0.45rem;
+            float: left;
+            width: 100%;
+
+            /* background-color: #FAFAFA;
+                background-image: -webkit-linear-gradient(top, #E6EEF4, #E8EFF4, #E9F0F5, #F5F8FA, #F0F5F8);
+                background-image: -o-linear-gradient(top, #E6EEF4, #E8EFF4, #E9F0F5, #F5F8FA, #F0F5F8);
+                background-image: -ms-linear-gradient(top, #E6EEF4, #E8EFF4, #E9F0F5, #F5F8FA, #F0F5F8);
+                background-image: linear-gradient(top, #E6EEF4, #E8EFF4, #E9F0F5, #F5F8FA, #F0F5F8);
+                background-repeat: repeat-x; */
+        }
+
+        .lookup {
+            border: 0.01rem solid #CCCCCC;
+        }
+
+        a {
+            color: #000000;
+        }
+
+        .lookup img {
+            width: 15px;
+        }
+
+        .lookup input {
+            margin: 0px;
+            outline: none;
+            border: 0px solid red;
+            padding: 0.05rem;
+            background: #FFFFFF;
+        }
+
+        .Pname {
+            font-size: 15px;
+        }
+
+        .mask {
+            position: fixed;
+            z-index: 40;
+            width: 100%;
+            height: 100%;
+            display: none;
+            background-color: rgba(0, 0, 0, .3);
+            /*display: none;*/
+        }
+
+        .mask_content {
+            height: 75%;
+            width: 70%;
+            margin-left: 15%;
+            margin-top: 6%;
+            background: #FFFFFF;
+            z-index: 50;
+            border-radius: 0.2rem;
+            display: none;
+            position: absolute;
+        }
+
+        .mask_left {
+            margin-left: 0.5rem;
+            width: 15%;
+            float: left;
+            /*margin-top: 0.2rem;*/
+            text-align: center;
+            /* line-height: 1rem; */
+        }
+
+        .mask_left_top {
+            background: #7B7DE5;
+            color: #FFFFFF;
+            font-size: 16px;
+            padding: 0.2rem 0;
+            box-sizing: border-box;
+        }
+
+        .mask_left_content {
+            border: #EDF0F7 solid 0.02rem;
+            height: 6.4rem;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .mask_left_content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .mask_right,
+        .mask_show,
+        .mask_show_content {
+            float: left;
+            width: 80%;
+            /*margin-top: 0.2rem;*/
+            /* border: 0.01rem solid #CCCCCC; */
+        }
+
+        .mask_right,
+        .mask_show {
+            border: none;
+        }
+
+        .mask_show_content ul {
+            width: 100%;
+            height: 4.56rem;
+            margin: 0;
+            padding: 0.2rem 0;
+            box-sizing: border-box;
+            list-style-type: none;
+            text-align: center;
+            border: 1px solid #e8e5e5;
+            overflow-y: auto;
+        }
+
+        .mask_show_content ul li {
+            float: left;
+            display: block;
+            width: 14%;
+            height: 0.45rem;
+            text-align: center;
+            line-height: 0.45rem;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+
+        .mask_right ul li {
+            float: left;
+            width: 14%;
+            text-align: center;
+            margin-left: 0.5rem;
+        }
+
+        .mask_show {
+            float: left;
+            width: 80%;
+            margin-top: 0.2rem;
+            font-size: 0.2rem;
+            height: 0.5rem;
+        }
+
+        .mask_show ul li {
+            float: left;
+            width: 14%;
+            text-align: center;
+            margin-left: 0.5rem;
+            padding: 0.1rem 0;
+            box-sizing: border-box;
+            cursor: pointer;
+            color: #ccc;
+            border: 1px solid #ccc;
+        }
+
+        /* .mask_show ul li:nth-child(1) {
+            margin-left: 0.2rem;
+            margin-right: 0.2rem;
+        }
+
+        .mask_show ul li:nth-child(3) {
+            margin-left: 0rem;
+        }
+
+        .mask_show ul li:nth-child(4) {
+            margin: 0px;
+        }
+
+        .mask_show ul li:nth-child(5) {
+            margin-left: 0.3rem;
+        } */
+
+        .Hit {
+            border: 0.01rem solid #7B7DE5;
+        }
+
+        .mask_show_content {
+            margin-top: 0.2rem;
+            height: 6rem;
+            margin-left: 0.5rem;
+            width: 72%;
+        }
+
+        .box .right .areaMessMask .mask_content .mask_show ul {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+            height: 0.5rem;
+        }
+
+        .mask_left_content ul {
+            margin-left: 0px;
+            cursor: pointer;
+        }
+
+        .mask_left_content ul li {
+            width: 100%;
+            padding: 0.2rem 4%;
+            box-sizing: border-box;
+            border-bottom: 0.01rem solid #ddd;
+            cursor: pointer;
+            font-size: 14px;
+            word-wrap: break-word;
+        }
+
+        .mask_but {
+            width: 36%;
+            height: 0.6rem;
+            background: #7B7DE5;
+            color: white;
+            border: 0px solid #7B7DE5;
+            font-size: 0.2rem;
+            border-radius: 0.1rem;
+            margin: 0.7rem auto 0 auto;
+            text-align: center;
+            line-height: 0.6rem;
+            cursor: pointer;
+        }
+
+        .list {
+            margin-left: 2rem;
+        }
+
+        .close1 {
+            width: 100%;
+            height: 0.7rem;
+            line-height: 0.75rem;
+            text-align: center;
+            font-size: 8px;
+            border-bottom: 0.01rem solid #e8e5e5;
+            margin-bottom: 20px;
+        }
+
+        .close1 img {
+            float: right;
+            width: 18px;
+            height: 18px;
+            margin: 16px 20px 0 0;
+            cursor: pointer;
+        }
+
+        .close1 span {
+            float: left;
+            text-indent: 41px;
+            font-size: 18px;
+        }
+
+        .figure {
+            display: flex;
+        }
+
+        .regulationResist {
+            width: 50%;
+            display: flex;
+            align-items: center;
+            font-size: 0.4rem;
+            padding-left: 5%;
+            box-sizing: border-box;
+        }
+
+        .ycyBrt {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 15px;
+            height: 55px;
+            line-height: 55px;
+        }
+
+        .ycyBrt:nth-child(odd) {
+            background: #f5f5f5;
+        }
+
+        /* .box .right .data {
+            padding: 0.4rem 0;
+        } */
+
+        .box .right .data .title {
+            width: 100%;
+        }
+
+        .box .right .data .title .Pname {
+            width: 9.0909%;
+        }
+
+        .jeTxt {
+            width: 45%;
+            float: left;
+            color: #B4BBCC;
+            position: relative;
+            /* margin-left: -3px; */
+        }
+
+        .jeTxt span {
+            position: absolute;
+            top: 48%;
+            left: 10%;
+            font-size: 18px;
+        }
+
+        .jeTxt input {
+            margin-top: 0.1rem;
+            text-indent: 0.3rem;
+            border-radius: 0 !important;
+        }
+
+        .colorTxt span {
+            color: #333;
+        }
+
+        .colorTxt #addMoney {
+            border: 1px solid #999;
+        }
+
+        .colorTxt #reduceMoney {
+            border: 1px solid #999;
+        }
+
+        .activeColor {
+            color: #7B7DE5;
+        }
+
+        .mask_show ul .Hit {
+            border: 0.01rem solid #7B7DE5;
+            color: #7B7DE5;
+        }
+        .Pname input::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+  color: #999;
+  font-size: 14px;
+}
+.Pname input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  color: #999;
+  font-size: 14px;
+}
+.Pname input::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color: #999;
+  font-size: 14px;
+}
+.Pname input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #999;
+  font-size: 14px;
+}
+    </style>
+</head>
+
+<body>
+
+<!--提示弹框-->
+<div class="postBj"></div>
+<div class="ok-pop">
+    <div class="title"><i></i><span class="text">成功</span></div>
+</div>
+<div class="no-pop">
+    <div class="title"><i></i><span class="text">失败</span></div>
+</div>
+<div class="mask">
+
+</div>
+<div class="mask_content">
+    <!-- <div class="close1">X</div> -->
+
+    <div class="close1"><img src="img/gb.png" alt=""><span>选择区域</span></div>
+    <div class="mask_left">
+        <div class="mask_left_top">
+            <span>组织机构</span>
+        </div>
+        <div class="mask_left_content">
+            <ul>
+
+            </ul>
+        </div>
+    </div>
+    <div class="mask_right">
+        <ul>
+            <li>省市</li>
+            <li>部门</li>
+            <li>区域</li>
+            <li>店面</li>
+        </ul>
+    </div>
+    <div class="mask_show">
+        <ul>
+        </ul>
+    </div>
+    <div class="mask_show_content">
+        <ul></ul>
+        <div class="mask_but">保存</div>
+    </div>
+</div>
+<div class="box">
+    <div class="left">
+        <div class="leftTop">
+            <img src="img/login34.png" alt="">
+        </div>
+        <div class="leftBottom">
+            <div class="userInfo">
+                <img src="img/5.jpg" alt="" class="userImgTwo">
+                <div class="rightNr">
+                    <div class="userName"></div>
+                    <div class="iphoneTxt"></div>
+                </div>
+            </div>
+            <ul class="yiji">
+                <li>
+                    <img src="http://47.104.173.39:8080/new_product/upload/cpgl.png" class="picSize"/>
+                    <a href="crationOrder.html" class="textNav">产品管理</a>
+                    <img src="img/jt.png" alt="" class="jtIco">
+                </li>
+                <li>
+                    <img src="http://47.104.173.39:8080/new_product/upload/cggl.png" class="picSize"/>
+                    <a href="leadOrder.html" class="textNav">采购管理</a>
+                    <img src="img/jt.png" alt="" class="jtIco">
+                </li>
+                <li>
+                    <img src="http://47.104.173.39:8080/new_product/upload/jggl.png" class="picSize"/>
+                    <a href="userList.html" class="textNav">机构管理</a>
+                    <img src="img/jt.png" alt="" class="jtIco">
+                </li>
+                <li>
+                    <img src="http://47.104.173.39:8080/new_product/upload/qybm.png" class="picSize"/>
+                    <a href="mechanism.html" class="textNav">区域部门</a>
+                    <img src="img/jt.png" alt="" class="jtIco">
+                </li>
+                <li>
+                    <img src="http://47.104.173.39:8080/new_product/upload/ggxx.png" class="picSize"/>
+                    <a href="setMessage.html" class="textNav">公告消息</a>
+                    <img src="img/jt.png" alt="" class="jtIco">
+                </li>
+                <li class="activeName">
+                    <img src="http://47.104.173.39:8080/new_product/upload/cwgl.png" class="picSize"/>
+                    <a href="Finance.html" class="textNav">财务管理</a>
+                    <img src="img/jt.png" alt="" class="jtIco">
+                </li>
+                <li>
+                    <img src="http://47.104.173.39:8080/new_product/upload/qxgl.png" class="picSize"/>
+                    <a href="queryMan.html" class="textNav">权限管理</a>
+                    <img src="img/jt.png" alt="" class="jtIco">
+                </li>
+                <li>
+                    <img src="http://47.104.173.39:8080/new_product/upload/khmx.png" class="picSize"/>
+                    <a href="customerDetails.html" class="textNav">客户明细单</a>
+                    <img src="img/jt.png" alt="" class="jtIco">
+                </li>
+                <li>
+                    <img src="http://47.104.173.39:8080/new_product/upload/szgz.png" class="picSize"/>
+                    <a href="wageChoice.html" class="textNav">设置工资</a>
+                    <img src="img/jt.png" alt="" class="jtIco">
+                </li>
+                <li>
+                    <img src="http://47.104.173.39:8080/new_product/upload/xcx.png" class="picSize"/>
+                    <a href="userInformation.html" class="textNav">小程序管理</a>
+                    <img src="img/jt.png" alt="" class="jtIco">
+                </li>
+                <li>
+                    <img src="http://47.104.173.39:8080/new_product/upload/cdcz.png" class="picSize"/>
+                    <a href="menuList.html" class="textNav">菜单操作</a>
+                    <img src="img/jt.png" alt="" class="jtIco">
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="right">
+        <div class="rightTop">
+            <div class="rightUser">
+                <div class="userNameTxt">
+                    <div class="userBox">
+                        <img src="img/5.jpg" alt="" class="userImg">
+                        <span class="userName"></span>
+                        <img src="img/botton.png" alt="" class="topIco">
+                    </div>
+                    <div class="tanBxo">
+                        <ul>
+                            <li>个人信息</li>
+                            <li class="loginTo">退出登录</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- <div class="loginTo">退出登录</div> -->
+            </div>
+        </div>
+        <div class="subMenu" id="add_style">
+            <a href="Finance.html#0" class="unSelect ">租金</a>
+            <a href="Finance.html#1" class="unSelect ">人员费用</a>
+            <a href="#2" class="unSelect ">物流费用</a>
+            <a href="#3" class="unSelect ">常态杂费</a>
+            <a href="#4" class="unSelect ">报销费用</a>
+            <a href="#5" class="unSelect ">杂费</a>
+            <a href="#6" class="unSelect ">其他</a>
+            <a href="#7" class="unSelect ">调低费用</a>
+            <a href="#8" class="unSelect ">管理费用</a>
+            <a href="#9" class="unSelect ">财务费用</a>
+            <a href="paymentForm.html" class="unSelect ">付款单</a>
+        </div>
+        <div class="add">
+            <div class="add_date">
+                <span>创建时间：</span>
+                <div class="add_input">
+                    <input type="text" name="begin" id="begin" placeholder="请选择时间" value="" readonly/>
+                    <!-- <img src="img/calendar.png" class="begin"/> -->
+                </div>
+            </div>
+            <div class="prepare">
+                <span>添加备注：</span>
+                <div class="add_input">
+                    <input type="text" class="remark" placeholder="请添加备注"/>
+                </div>
+            </div>
+            <div class="add_left">
+                <div class="upload">
+                    提交
+                </div>
+                <div class="details">
+                    详情
+                </div>
+            </div>
+        </div>
+        <!-- <div class="Line"></div> -->
+        <div class="sousuo" id="add_style">
+            <ul>
+                <li  style="text-indent: 10px">添加名称</li>
+                <input type="text" id="addAame" placeholder="请添加名称"/>
+            </ul>
+            <ul>
+                <div class="jeTxt">
+                    <div style="text-indent: 10px; font-size: 14px;">添加金额</div>
+                    <span>+</span>
+                    <input type="number" id="addMoney"  placeholder="请输入" style="text-indent: 15px;">
+                </div>
+                <!-- <div style="float: left;margin: 18% 1.3% 0 1%; font-size: 17.5px; color: #C6CDD9">~</div> -->
+                <div class="jeTxt">
+                    <div style="text-indent: 10px;font-size: 14px;">减少金额</div>
+                    <span>-</span>
+                    <input type="number" id="reduceMoney" placeholder="请输入"style="text-indent: 15px;">
+                </div>
+
+            </ul>
+            <ul>
+                <li style="text-indent: 10px">添加数量</li>
+                <input type="number" id="addName" placeholder="请添加数量"/>
+            </ul>
+            <ul>
+                <li style="margin-bottom: 0.06rem; text-indent: 10px">归属单位</li>
+                <li class="lookup">
+                    <input type="text" readonly="readonly" id="danwei"
+                           style="border: 0px solid red; height: 0.32rem; cursor: pointer;"/>
+                    <img src="img/lookup.png" alt=""/>
+                </li>
+            </ul>
+
+            <button id="button">添加</button>
+        </div>
+        <div class="data">
+            <div class="title">
+                <div class="Pname">名称</div>
+                <div class="Pname">价格</div>
+                <div class="Pname">数量</div>
+                <div class="Pname">总价</div>
+                <div class="Pname">日期</div>
+                <div class="Pname">公司</div>
+                <div class="Pname">省市</div>
+                <div class="Pname">部门</div>
+                <div class="Pname">区域</div>
+                <div class="Pname">店面</div>
+                <div class="Pname">备注</div>
+                <div class="Pname">操作</div>
+            </div>
+            <div class="dataMess">
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="jq/jquery-3.3.1.min.js"></script>
+<script src="jq/jquery.cookie.js"></script>
+<script src="jq/main.js"></script>
+
+<script src="jq/boos/bootstrap-datetimepicker.js"></script>
+<script src="jq/boos/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="jq/boos/bootstrap.js"></script>
+<script>
+    //切换底色
+    // function qiehuan() {
+    //     var yijili = document.querySelectorAll('#add_style a');
+    //     var length = yijili.length;
+    //     for (let i = 0; i < length; i++) {
+    //         yijili[i].addEventListener('click', function (target) {
+    //             console.log(target);
+    //         })
+    //     }
+    //     // console.log(yijili);
+	// }
+    function asdf() {
+        // localStorage.setItem('hash','2');
+        var hash=localStorage.getItem('hash');
+        console.log(hash);
+		yijili = document.querySelectorAll('#add_style a');
+		yijili[hash].classList.add('pitch');
+        // window.location.reload();   //刷新网页
+
+    }
+    asdf();
+
+
+
+    // qiehuan();
+    (function (doc, win) {
+        var docEl = doc.documentElement, //html
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function () {
+                var clientWidth = docEl.clientWidth;
+                if (!clientWidth) return;
+                docEl.style.fontSize = 16 / 375 * clientWidth + "px";
+            };
+        if (!doc.addEventListener) return;
+        win.addEventListener(resizeEvt, recalc, false);
+        doc.addEventListener('DOMContentLoaded', recalc, false);
+        //    DOMContentLoaded,就是当dom结构加载完毕就执行,比window.onload要快
+    })(document, window);
+    $(function () {
+        // window.history.forward(1)	// 点击浏览器的后退，禁止返回上一页
+        $('input').val('')
+    });
+
+    // menu();
+    $("body").delegate(".inaction", "click", function () {
+        var mainId = $(this)[0].id
+        sessionStorage.setItem("mainId", mainId)
+        sessionStorage.removeItem("subMainId")
+        // sublevelMenu( mainid )
+    })
+    $("body").delegate(".unSelect", "click", function () {
+        var subId = $(this)[0].id;
+        sessionStorage.setItem("subMainId", subId)
+    })
+
+
+    var box = [];
+    $('#begin').datetimepicker({
+        format: 'yyyy-mm-dd ',
+        autoclose: true,
+        language: 'zh-CN',
+        minView: 3,
+    });
+    $("#addMoney").bind('input propertychange', function () {
+        console.log("2")
+        $('#reduceMoney').val("");
+    });
+    $("#reduceMoney").bind('input propertychange', function () {
+        console.log("1")
+        $('#addMoney').val("");
+    });
+    // 添加
+    $('#button').click(function () {
+        // var val = $("input[name='chooses']:checked").val();  //获取不到值？？
+        // console.log(val);
+        var readList = $("input[name='chooses']")
+        for (var i = 0; i < readList.length; i++) {
+            // console.log(readList[i])
+            // console.log(readList[i].checked)
+            if (readList[i].checked) {
+                console.log(readList[i])
+            }
+        }
+        var add_rent = $('#addAame').val();
+        var add_money = $('#addMoney').val();
+        var reduceMoney = $('#reduceMoney').val();
+        var add_number = $('#addName').val();
+        var add_remark = $('.remark').val();
+        var add_danwei = $('#danwei').val();
+        var date = $("#begin").val();
+        if (add_money && reduceMoney) {
+            noPop('添加金额与减少金额只允许选填一项');
+            return;
+        }
+        var _money = '';
+        if (add_money) {
+            _money = add_money;
+        }
+        if (reduceMoney) {
+            _money = reduceMoney;
+        }
+        if (add_rent == "" || _money == "" || add_number == "" || add_danwei == "") {
+            noPop('请填写完整')
+            return;
+        }
+        // debugger;
+        if (box.length > 0) {
+            var wrap = $('<ul class="ycyBrt"></ul>')
+            var content =
+                '<li>' + add_rent + '</li>' +
+                '<li>' + (reduceMoney ? ('-' + reduceMoney) : (_money ? _money : '--')) + '</li>' +
+                '<li>' + add_number + '</li>' +
+                '<li>' + (reduceMoney ? (reduceMoney * -add_number) : _money * add_number) + '</li><li>' + $(
+                '#begin').val() + '</li>';
+            if (box.length == 1 && _hasParent) {
+                content += '<li id="' + box[0].id + '">' + box[0].contentt + '</li><li></li><li></li><li></li><li></li>';
+            } else {
+                for (var j = 0; j < 5; j++) {
+                    if (box[j]) {
+                        content += '<li id="' + box[j].id + ' ">' + box[j].contentt + '</li>';
+                    } else {
+                        content += '<li></li>';
+                    }
+                }
+            }
+
+            content = content + '<li class="comment" id="' + otherId + '">' + add_remark + '</li>' +
+                '<li><span class="delBtn">删除</span></li>';
+            console.log(otherId)
+            wrap.append(content)
+            $('.dataMess').append(wrap);
+        } else {
+            $('.dataMess').append('<ul>' +
+                '<li>' + add_rent + '</li>' +
+                '<li>' + add_money + '</li>' +
+                '<li>' + add_number + '</li>' +
+                '<li>' + add_money * add_number + '</li>' +
+                '<li>' + date + '</li>' +
+                //						'<li>'
+                '</ul>' + '<span class="delBtn">删除</span>');
+        }
+
+        $('.delBtn').click(function () {
+            $(this).parent().parent().parent().remove();
+
+        })
+    })
+    $('.sousuo').find('ul:eq(1),ul:eq(2)').find('input').blur(function () {
+        var reg = /^(-?\d+)(\.\d+)?$/;
+        if (reg.test($(this).val()) != true) {
+            $(this).val('')
+            // $(this).attr("placeholder", "请输入正确格式");
+
+        }
+    })
+    $('.lookup').click(function () {
+        $('.mask,.mask_content').show();
+        box.splice(0, box.length);
+        $.ajax({
+            url: url + "/office/selectAreaOffice",
+            type: "post",
+            data: {
+                "sessionid": $.cookie("sessionid")
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data)
+                if (data.state == '403') {
+                    window.location.href = ("index.html");
+                    return;
+                }
+                addRow(data, '0')
+
+                //						c?onsole.log($('.data_right').find("ul").attr("src"))
+                var s = $('.mask_left_content').find("ul").find('li')
+                for (var i = 0; i < s.length; i++) {
+                    //							console.log($(s).eq(i).attr("src"))
+                    if ($(s).eq(i).attr("src") == "0") {
+                        $(s).eq(i).css({
+                            "font-weight": "500"
+                        })
+                    }
+                }
+            }
+
+        });
+    })
+    var billName = "租金";
+
+    $('.unSelect').click(function () {
+        $(this).addClass("pitch");
+        var hash=$(this).index();
+        window.localStorage.setItem('hash',hash);
+        $(this).siblings().removeClass("pitch");
+        billName = $(this).text();
+        // console.log(billName)
+        // sessionStorage.setItem("name", billName)
+    });
+    
+    $('.mask_show').on("click", ".Selected", function () {
+
+        $(this).addClass("Hit").siblings().removeClass("Hit");
+        var id_add = $(this).find('a').attr("add_parentId");
+        var index_add = $(this).find('a').attr("type")
+        $(this).nextAll().text('请选择')
+        $.ajax({
+            type: "post",
+            //					url: url + "/area/selectArea ",
+            url: url + "/area/selectArea",
+            dataType: "json",
+            data: {
+                "sessionid": $.cookie("sessionid"),
+                id: id_add,
+                type: index_add - 1
+            },
+            success: function (data) {
+                console.log(data)
+                //type值等于2
+
+                $('.mask_show_content').find('ul').find("li").remove();
+
+                if (index > 5) {
+                    // alert("d")
+                    $('.add').attr("class", "no")
+
+                } else {
+                    $('.no').attr("class", "add")
+                }
+                for (var i = 0; i < data.length; i++) {
+
+                    $('.mask_show_content').find('ul').append("<li src='" + data[i].id + "' id='" +
+                        data[i].id + "'types='" + data[i].type + "' parentId='" + data[i]
+                            .parentId + "' class='list_data'>" + data[i].name + "</li>");
+                }
+
+                //
+            }
+        })
+
+    })
+    $('.mask').click(function () {
+        $('.mask,.mask_content').hide()
+    })
+    var boxx = [];
+
+    let _sysAreaId = '';
+    let _hasParent = false;
+    $('.mask_but').click(function () {
+        boxx = [];
+        box = [];
+        var companyText = $(".cmpSelected")
+        for (var i = 0; i < companyText.length; i++) {
+            boxx.push(companyText.eq(i).text())
+            box.push({
+                "contentt": companyText.eq(i).text(),
+                "id": companyText.eq(i).id
+            })
+            console.log(companyText.eq(i).id)
+        }
+        var text = $('.Selected')
+        var bot = 0;
+        var cc;
+        for (var i = 0; i < text.length; i++) {
+            boxx.push(text.eq(i).find('a').text())
+            box.push({
+                "contentt": text.eq(i).find('a').text(),
+                "id": text.eq(i).find('a')[0].id
+            })
+            console.log(text.eq(i).find('a')[0].id)
+        }
+        if (boxx.length == 0) {
+            boxx.push($('.cmpSelected').text())
+            box.push({
+                "contentt": $('.cmpSelected').text(),
+                "id": $('.cmpSelected').attr('id')
+            })
+            _sysAreaId = $('.cmpSelected').attr('id');
+            _hasParent = true;
+        } else {
+            _sysAreaId = box[box.length - 1].id;
+            _hasParent = false;
+        }
+        $('.lookup').find('input').val(boxx);
+        $('.mask,.mask_content').hide();
+        $('.mask_show').find('ul').find('li').remove();
+        $('.mask_show_content').find('ul').find('li').remove();
+        console.log(box);
+
+    })
+
+    function addRow(data, pid) {
+        for (var i = 0; i < data.length; i++) {
+            var row = data[i];
+            if (row.parentId == pid) {
+
+                $('.mask_left_content').find("ul").append('<li src="' + row.parentId + '" id="' + row.id + '">' + row
+                    .name + '</li>')
+                addRow(data, row.id);
+            }
+
+        }
+    }
+
+    var officeid = ""; // 公司id
+    $('.mask_left_content').on("click", "li", function () {
+        $(this).addClass('cmpSelected').siblings('li').removeClass('cmpSelected');
+        $('.mask_show').find('ul').find('li').remove();
+        $('.mask_show_content').find('ul').find('li').remove();
+        $('.mask_show').find('ul').append('<li>' + '请选择省市' + '</li>' +
+            '<li>' + '请选择部门' + '</li>' +
+            '<li>' + '请选择区域' + '</li>' +
+            '<li>' + '请选择店面' + '</li>'
+        )
+        $(this).css({
+            "color": "#7B7DE5"
+        }).siblings().css({
+            "color": "#000"
+        });
+        index = 0;
+        id = 0;
+
+        $('.mask_show').find('li:eq(0)').addClass("Hit").siblings().removeClass("Hit")
+        officeid = $(this).attr("id")
+
+        $(".mask_right ul li").removeClass("activeColor");
+        $(".mask_right ul li").eq(index).addClass("activeColor")
+        ajax();
+    })
+    var id = "0";
+    var index = 0;
+    var ids = "0";
+    var _thisid = "";
+    var index = 0;
+    var otherId;
+    $('.mask_show_content').on("click", ".list_data", function () {
+        var _this = $(this);
+        otherId = $(this)[0].id
+        console.log(otherId)
+        $(".Hit").html("<a add_id='" + $(this).attr("id") + "' add_parentId='" + $(this).attr("parentId") +
+            "' type='" + $(this).attr("types") + "' id='" + $(this).attr("id") + "'>" + $(this).text() +
+            "</a>").removeClass("Hit").addClass("Selected").next().addClass("Hit");
+        $('.mask_show_content').find('ul').find('li').remove();
+
+        id = $('.Hit').prev().find('a').attr("add_id")
+        var parentId = $('.Hit').prev().find('a').attr("add_parentId")
+        index = $('.Hit').prev().find('a').attr("type")
+
+        $(".mask_right ul li").removeClass("activeColor");
+        $(".mask_right ul li").eq(index).addClass("activeColor")
+        // console.log(id);
+        ajax()
+    })
+
+    function ajax() {
+        $.ajax({
+            type: "post",
+            url: url + "/area/selectArea",
+            dataType: "json",
+            data: {
+                "sessionid": $.cookie("sessionid"),
+                id: id,
+                officeid: officeid,
+                type: index
+            },
+            success: function (data) {
+                console.log(data)
+                // console.log($.cookie("sessionid"))
+                for (var i = 0; i < data.length; i++) {
+                    $('.mask_show_content').find('ul').append("<li src='" + data[i].id + "' id='" + data[i]
+                            .id + "' types='" + data[i].type + "' parentId='" + data[i].parentId +
+                        "' class='list_data'>" + data[i].name + "</li>");
+                }
+            }
+        })
+    }
+    // 权限接口
+    $(document).ready(function(){ 
+        　　$.ajax({
+            type: "post",
+            url: url + "/financial/form",
+            dataType: "json",
+            data: {
+                "sessionid": $.cookie("sessionid"),
+            },
+            success: function (data) {
+                console.log(data)
+                if( data.state == -200 ){
+                    window.location.href="quanxian.html"
+                }
+            }
+        })
+    }); 
+    //		提交
+    $('.upload').click(function () {
+        var begin = $('#begin').val();
+        var address = $('.lookup').find('input').val();
+        var begin = $('#begin').val().split("-")
+        if (begin == "") {
+            noPop('请完整输入')
+            return
+        }
+        var ul = $('.dataMess').find('ul');
+        console.log($('.dataMess').find('ul'))
+        if (ul.length == 0) {
+            noPop('请先添加数据')
+            return
+        }
+        var atr = [];
+        for (var i = 0; i < ul.length; i++) {
+            console.log(ul.eq(i).next())
+            var boj = {};
+            boj.name = ul.eq(i).find('li').eq(0).text();
+            boj.money = ul.eq(i).find('li').eq(1).text();
+            boj.number = ul.eq(i).find('li').eq(2).text();
+            boj.yearMosDay = $.trim(ul.eq(i).find('li').eq(4).text());
+            boj.remark = ul.eq(i).find('li').eq(10).text();
+            boj.sysAreaId = _sysAreaId;
+
+            atr.push(boj)
+        }
+        console.log(atr)
+
+        var json = {
+            billName: billName,
+            financialAccountingB: atr
+        }
+        console.log(JSON.stringify(json))
+        $.ajax({
+            type: "post",
+            url: url + "/financial/insert",
+            async: true,
+            typeType: "json",
+            data: {
+                sessionid: $.cookie("sessionid"),
+                jsons: JSON.stringify(json)
+            },
+            success: function (data) {
+                okPop('创建成功');
+                $("#begin").val('');
+                $('.remark').val('');
+                $('.sousuo').find('input').val('')
+                $('.dataMess').html('');
+                // window.location.reload();   //刷新网页
+
+            }
+        })
+    })
+
+    $('.details').click(function () {
+        var len = $(".dataMess").find('ul').length
+        if (len != 0) {
+            var con = confirm("提示：您将进入详情页面，本页面未提交的数据将不会保存，将全部清空")
+            if (con) {
+                window.location.href = ("Finance_details.html");
+            }
+        } else {
+            window.location.href = ("Finance_details.html");
+        }
+    })
+    $(".close1").click(function () {
+        $('.mask,.mask_content').hide()
+        window.location.reload(); //刷新网页
+    })
+
+    $(".userName").text($.cookie("username"))
+        $(".iphoneTxt").text($.cookie("phone"))
+        $(".loginTo").click(function () {
+            $.cookie('sessionid', sessionid, { expires: -1 }); // 删除 cookie
+            $.cookie('username', sessionid, { expires: -1 }); // 删除 username
+            $.cookie('phone', sessionid, { expires: -1 }); // 删除 phones
+            okPop("退出成功")
+            setTimeout (function(){
+                window.location.reload(); //刷新网页
+            },2000)
+            window.location.href="index.html"
+        })
+    $(".userBox").click(function () {
+        $(".tanBxo").toggle()
+    })
+
+    $(".jeTxt ").click(function () {
+        $(this).addClass("colorTxt").siblings().removeClass("colorTxt")
+    })
+</script>
+</body>
+
+</html>

@@ -1,0 +1,365 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../plugins-2.5.5/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="../../css/global.css" media="all">
+    <link rel="stylesheet" href="../../css/table.css" />
+     <link rel="stylesheet" href="../../css/finance/finance.css" />
+
+
+  <style type="text/css">
+      .layui-fluid{
+          padding: 0;
+          margin:0;
+      }
+      .layuiadmin-card-header-auto{
+          margin-top: 15px;
+          height: auto;
+      }
+      .layui-card-header{
+          border-bottom: none;
+          /*box-shadow: 0 5px 7px #dbe7ef;*/
+      }
+      .layui-card-body{
+          padding:0;
+      }
+      .layui-form-item {
+          margin-bottom: 0;
+      }
+
+      .layui-table-view{
+          border-width: 0;
+          margin: 0;
+      }
+      .layui-table-header{
+          background-color: #1ab394;
+      }
+      .layui-table thead tr {
+          background-color: #1ab394;
+      }
+      .layui-table thead tr span{
+          color: #fff;
+          font-weight: 600;
+      }
+      .layui-table-click{
+          background-color: transparent;
+      }
+      .layui-table tbody tr:hover {
+          background-color: transparent;
+      }
+      .layui-table-hover{
+          background-color: transparent;
+      }
+      .layui-table thead tr span{
+          font-weight:bold;
+      }
+      .handle{
+          width: 20px;
+          cursor: pointer;
+      }
+      .layui-btn{
+          border-radius: 4px;
+      }
+      .layui-btn-blue{
+          background-color: #7B7DE5;
+      }
+
+      .query .active {
+          background: #7B7DE5;
+          color: #fff;
+          border: 0;
+      }
+      .delete{
+          color: #F86F5C;
+          cursor: pointer;
+          padding: 10px;
+      }
+
+
+      /*查询按钮样式*/
+    .selectBtn{
+          font-size: 13px;
+          border-radius: 3px;
+          height: 22px;
+          line-height: 24px;
+          padding: 0 15px;
+          color: #676a6c;
+          background-color: buttonface;
+
+      }
+      .layui-btn:hover {
+          opacity: 1;
+          color: #333;
+      }
+      .layui-form-item .layui-inline {
+          margin-bottom: 0;
+          margin-right: 0;
+      }
+      .layui-form-label{
+          text-align: left;
+          width: 40px;
+          padding: 5px 0;
+      }
+      .activeFocu{
+          background: #fb625a;
+          color: #FFF;
+      }
+      .typeBtn{
+          font-size: 13px;
+          border-radius: 3px;
+          height: 31px;
+          line-height: 31px;
+          padding: 0 15px;
+          color: #676a6c;
+          background-color: buttonface;
+      }
+      .activeFocus{
+          background: #1ab394!important;
+          color: #FFF;
+      }
+  </style>
+</head>
+
+<body>
+
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header layuiadmin-card-header-auto">
+            <form  id="selectFinanceForm" class="layui-form" action="" lay-filter="selectFinanceForm">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <button id="1" type="button" class="layui-btn selectBtn">租金</button>
+                        <button id="2" type="button" class="layui-btn selectBtn">人员费用</button>
+                        <button id="3" type="button" class="layui-btn selectBtn">物流费用</button>
+                        <button id="4" type="button" class="layui-btn selectBtn">常态杂费</button>
+                        <button id="5" type="button" class="layui-btn selectBtn">报销费用</button>
+                        <button id="6" type="button" class="layui-btn selectBtn">其他费用</button>
+                        <button id="7" type="button" class="layui-btn selectBtn">调低费用</button>
+                        <button id="8" type="button" class="layui-btn selectBtn">管理费用</button>
+                        <button id="9" type="button" class="layui-btn selectBtn">财务费用</button>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">年月:</label>
+                        <div class="layui-input-inline" style="width: 100px">
+                            <input   id="yearMonthQuery" type="text" name="yearMosDay" placeholder="yyyy-MM" class="layui-input" style="height: 30px;">
+                        </div>
+                    </div>
+                   <div class="layui-inline">
+                       <button id="s" type="button" class="layui-btn typeBtn activeFocus" onclick="changeStatus('s')">收入</button>
+                       <button id="z" type="button" class="layui-btn typeBtn" onclick="changeStatus('z')">支出</button>
+
+                       <!--<button  type="button" class="layui-btn"  lay-filter="LAY-user-front-search">
+                           <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                       </button>-->
+                    </div>
+                    <div class="layui-inline" style="float:right">
+                        <button id="createFinance" type="button"  class="layui-btn layui-btn-warm">添加</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+
+
+        <div class="layui-card-body">
+            <table id="finance-table" class="layui-table"  lay-skin="nob"  lay-filter="finance"></table>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript" src="../../plugins-2.5.5/layui/layui.js"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.config({
+        base: '../../js/'
+    })
+layui.use(['table','jquery','layer','laydate','cookie','form','common'], function(){
+    var $= layui.jquery;
+    var table = layui.table;
+    var laydate = layui.laydate;
+    var cookie=layui.cookie;
+    var common = layui.common;
+    var form = layui.form;
+    //“方法级渲染”配置方式
+    table.render({
+        elem: '#finance-table'
+        ,cellMinWidth: 140
+        ,skin:"nob"
+        ,size:"lg"
+        ,height:'full-72'
+        ,even:"true"
+        ,url: common.address +  "financial/selectFinancialAccounting"
+        ,page: true //开启分页
+        ,where: {sessionid: $.cookie("sessionid"), type: $(".activeFocus").attr('id')}
+        ,method: 'post' //如果无需自定义HTTP类型，可不加该参数
+        ,parseData: function(res){} //res 即为原始返回的数据
+        ,cols: [[ //表头
+         {field:'name', align: 'center', title: '名称'}
+        ,{field: 'money', align: 'center', title: '金额'+'<span style="font-size: 12px">(合计：￥639.00)</span>',width: 200}
+        ,{field:'number', align: 'center', title: '数量'}
+        ,{field: 'totalMoney', align: 'center', title: '总价',width: 200}
+        ,{field: 'dataDictionaryName', align: 'center', title: '类型'}
+        ,{field: 'yearMosDay', align: 'center', title: '日期'}
+        ,{field: 'userName', align: 'center', title: '姓名'}
+        ,{field: 'remark', align: 'center', title: '备注'}
+        ,{fixed: 'right', title: '作废',  align:'center',width:'60', toolbar: '#toVoid'}
+    ]]
+    });
+
+    //月份筛选
+    laydate.render({
+        elem: '#yearMonthQuery'
+        ,type: 'month'
+        ,done: function(value, date, endDate){
+            //获取所有的activeFocu 的id
+            var arr = new Array();
+            $(".activeFocu").each(function(){
+                arr.push($(this).attr('id'));
+            });
+            tablereload.reload($(".activeFocus").attr('id'),value,arr.join(','));
+        }
+    });
+    //监听工具条
+    table.on('tool(finance)', function(obj){
+        var data = obj.data;
+        var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+        var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+        alert(JSON.stringify(tr));
+        if(obj.event === 'edit'){
+            //询问框
+            layer.confirm('您是如何看待前端开发？', {
+                btn: ['重要','奇葩'] //按钮
+            }, function(){
+                layer.msg('的确很重要', {icon: 1});
+            }, function(){
+                layer.msg('也可以这样', {
+                    time: 20000, //20s后自动关闭
+                    btn: ['明白了', '知道了']
+                });
+            });
+        }
+    });
+    //添加弹窗
+    $("#createFinance").on('click', function () {
+        layer.open({
+             type: 2
+            ,title: '财务记账添加'
+            ,content: 'createFinance.html'
+            ,maxmin: true
+            ,area: ['900px', '450px']
+            ,btn: ['确定', '取消']
+            ,yes: function(index, layero){
+                var iframeWindow = window['layui-layer-iframe'+ index]
+                    ,submitID = 'LAY-finance-front-submit'
+                    ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                //监听提交
+                iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                    var field = data.field; //获取提交的字段
+
+                     $.ajax({
+                        url: common.address +"financial/insert",
+                        method: "POST",
+                        data:{ "sessionid": $.cookie("sessionid"),
+                                "json":JSON.stringify(field)},
+                        success:function(res){
+                            layer.close(index); //关闭弹层
+                            var sorz=''
+                            if(field.moneya !='undefined' && field.moneya !=''){
+                                sorz='s'
+                                changeStatus('s')
+                            }else if(field.moneyb !='undefined' && field.moneyb !=''){
+                                sorz='z'
+                                changeStatus('z')
+                            }
+                            $(".selectBtn").removeClass("activeFocu");
+                            $("#yearMonthQuery").val("");
+
+                            tablereload.reload(sorz,'','');
+                        }
+                    });
+
+                });
+
+                submit.trigger('click');
+            }
+        });
+    });
+
+
+
+    //类别筛选
+    $(".selectBtn").on('click', function () {
+        var data = form.val("selectFinanceForm");
+        if($(this).hasClass("activeFocu"))
+            $(this).removeClass("activeFocu");
+        else
+            $(this).addClass("activeFocu")
+        //获取所有的activeFocu 的id
+        var arr = new Array();
+        $(".activeFocu").each(function(){
+            arr.push($(this).attr('id'));
+        });
+        tablereload.reload($(".activeFocus").attr('id'),data.yearMosDay,arr.join(','));
+
+    });
+    //收入支出筛选
+    window.changeStatus = function(v) {
+        var data = form.val("selectFinanceForm");
+        if(v=='s'){
+            $('#z').removeClass("activeFocus");
+            $('#s').addClass("activeFocus");
+        }else{
+            $('#s').removeClass("activeFocus");
+            $('#z').addClass("activeFocus")
+        }
+        //获取所有的activeFocu 的id
+        var arr = new Array();
+        $(".activeFocu").each(function(){
+            arr.push($(this).attr('id'));
+        });
+        tablereload.reload($(".activeFocus").attr('id'),data.yearMosDay,arr.join(','));
+    }
+
+    //表格数据加载
+    var tablereload = {
+        reload: function(type,yearMosDay,arr){
+            table.reload('finance-table', {
+                url: common.address +  "financial/selectFinancialAccounting"
+                ,where: {sessionid: $.cookie("sessionid"), type:type
+                ,yearMosDay:yearMosDay,dataDictionaryId:arr}
+                ,page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        }
+    };
+
+
+
+
+
+
+
+});
+
+</script>
+
+<!--作废-->
+<script type="text/html" id="toVoid">
+    <span class="delete" lay-event="edit">X</span>
+</script>
+</body>
+
+</html>

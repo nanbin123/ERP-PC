@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="../../plugins-2.5.5/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../../css/global.css" media="all">
+		<link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+
+	</head>
+	<style>
+		.topMess {
+			width: 100%;
+			display: flex;
+			align-items: center;
+			font-size: 15px;
+			margin-top: 6px;
+		}
+		.messOne {
+			width: 100%;
+			display: flex;
+			margin-bottom: 10px;
+		}
+		.messOne span {
+			width: 20%;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+
+		.layui-fluid{
+			padding: 0;
+			margin:0;
+		}
+		.layui-card-body{
+			padding:0;
+		}
+		.layui-table thead th{
+			font-weight:bold;
+			text-align:center;
+		}
+		.layui-table tbody tr{
+			text-align:center;
+		}
+		.save{
+			background-color: #1ab394;
+			border-color: #1ab394;
+			color: #FFF;
+			margin-left: 5px;
+		}
+		.addProduct{
+			background-color: #f8ac59;
+			border-color: #f8ac59;
+			color: #FFF;
+		}
+	</style>
+<body>
+
+<div class="layui-card">
+	<div class="layui-card-header">
+
+	</div>
+	<div class="layui-card-body">
+		<table class="layui-table" lay-skin="nob" style="margin-bottom: 20px">
+			<thead>
+			<tr>
+				<th>物料编号</th>
+				<th>品名</th>
+				<th>型号</th>
+				<th>颜色</th>
+				<th>尺寸</th>
+				<th>价格</th>
+				<th>材质</th>
+				<th>采购价</th>
+				<th>产地</th>
+				<th>是否在架</th>
+				<th>属性</th>
+				<th>品类</th>
+			</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+
+		<div style="position: absolute;left: 50%;margin-left: -90px;">
+			<button save-btn="" load="load" class="layui-btn layui-btn-sm save">保存</button>
+			<button class="layui-btn layui-btn-sm addProduct">+添加货品</button>
+		</div>
+
+	</div>
+</div>
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="../../plugins-2.5.5/layui/layui.js"></script>
+<script>
+    layui.config({//自定义模块路径
+        base: '../../js/'
+    })
+
+    layui.use(['table','jquery','layer'], function() {
+		var $ = layui.jquery;
+		var table = layui.table;
+		var layer = layui.layer;
+        var addData=[];
+
+
+
+
+
+		$("body").delegate(".addProduct", "click", function () {
+				//弹出即全屏
+			var index = layer.open({
+				type: 2,
+				content: 'productQuery.html',
+				area: [$(window).width()-40+"px", $(window).height()-40+"px"],
+				maxmin: true,
+				success: function(layero,index){
+					var iframeWindow = window['layui-layer-iframe'+ index]
+						,confirm = layero.find('iframe').contents().find('#confirm');
+					$(confirm).click(function(){
+						var checkStatus = iframeWindow.layui.table.checkStatus('product-table').data;
+						if(checkStatus.length ==0){
+							layer.msg('请选择一个子件产品进行组合');
+							return
+						}
+
+						layer.close(index);//关闭弹窗
+							layui.each(checkStatus, function(i1, item1){
+								$(".layui-table tbody").append(//追加数据
+								'<tr id="'+item1.id+'">'+
+								'<td>0000001</td>'+
+								'<td>'+item1.productName+'</td>'+
+								'<td>'+item1.type+'</td>'+
+								'<td>'+item1.color+'</td>'+
+								'<td>'+item1.size+'</td>'+
+								'<td>'+item1.price+'</td>'+
+								'<td>'+item1.texture+'</td>'+
+								'<td>'+item1.purchaseprice+'</td>'+
+								'<td>'+item1.production+'</td>'+
+								'<td>'+item1.soldOut+'</td>'+
+								'<td>'+item1.conventional+'</td>'+
+								'<td>'+item1.productType+'</td>'+
+								'</tr>'
+								);
+							})
+					});
+				}
+			});
+
+		})
+	})
+
+
+</script>
+
+</body>
+
+</html>

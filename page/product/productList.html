@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="../../plugins-2.5.5/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../../css/global.css" media="all">
+		<link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+		<link rel="stylesheet" href="../../css/table.css" />
+    <link rel="stylesheet" href="../../css/product/productList.css" />
+	</head>
+	<style type="text/css">
+        .layui-fluid{
+                padding: 0;
+                margin:0;
+        }
+        .layuiadmin-card-header-auto{
+          margin-top: 15px;
+          height: auto;
+        }
+      .layui-card-header{
+            border-bottom: none;
+            box-shadow: 0 5px 7px #dbe7ef;
+        }
+       .layui-card-body{
+          padding:0;
+       }
+        .layui-form-item {
+            margin-bottom: 0;
+        }
+
+        .layui-table-view{
+          border-width: 0;
+          margin: 0;
+        }
+      .layui-table thead tr{
+        background-color: #f2f2f2;
+      }
+
+      .layui-table thead tr span{
+            font-weight:bold;
+      }
+      .handle{
+          width: 20px;
+          cursor: pointer;
+      }
+
+
+        .layui-btn{
+          background-color: #7B7DE5;
+          border-radius: 4px;
+        }
+
+        .query .active {
+          background: #7B7DE5;
+          color: #fff;
+          border: 0;
+        }
+
+	</style>
+	<body>
+
+
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+        <div class="layui-form-item">
+           <div class="layui-inline query">         
+                  <label class="layui-form-label">查询条件:</label>                 
+                  <button id="customization">定制产品</button>
+                  <button id="convention">常规产品</button>
+                  <button id="soldOut">下架产品</button>
+                  <button id="normality">正常在架</button>
+                  <button id="all">查询全部</button>
+            </div> 
+             <div class="layui-inline">
+                <label class="layui-form-label">筛选:</label>
+                <div class="layui-input-inline">
+                  <select name="interest"  lay-filter="aihao">
+                    <option value=""></option>
+                    <option value="0">整件</option>
+                    <option value="1" selected="">组件</option>
+                    <option value="2">组合</option>
+                    <option value="3">全部</option>
+                  </select>
+                </div>
+              </div>
+               <div class="layui-inline">
+                  <label class="layui-form-label">品名,型号:</label>
+                  <div class="layui-input-inline">
+                  <input id="refer" type="text" name="" placeholder="请输入品名或者型号查询"
+                  style="border-radius: 4px;text-align: center" autocomplete="off" class="layui-input">
+                  </div>
+              </div> 
+               <div class="layui-inline">
+               <button id="productNameOrType" class="layui-btn" lay-submit="" lay-filter="LAY-user-front-search">
+                 <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+               </button>
+               </div> 
+          </div>
+        </div>
+
+       
+
+       
+      <div class="layui-card-body">
+          <div id="test1">
+      		 <table id="product-table" class="layui-table"  lay-skin="nob" lay-filter="demo"></table>
+          </div>
+	  </div>
+	</div>
+</div>
+		
+	
+			           
+
+		<script type="text/javascript" src="../../plugins-2.5.5/layui/layui.js"></script>
+		<script>
+	  layui.config({//自定义模块路径
+        base: '../../js/'
+    })
+    layui.use(['table','jquery','layer','tree','cookie','common'], function(){
+        var $= layui.jquery;
+        var table = layui.table;
+        var cookie=layui.cookie;
+        var common = layui.common;
+        var tree = layui.tree;
+
+
+        table.render({
+            elem: '#product-table'  
+            ,cellMinWidth: 120         
+            ,skin:"nob"
+            ,size:"lg"
+            ,height:"full-130"
+            ,even:"true"
+            ,url: common.address +  "product/selectListProduct"
+            ,page: true //开启分页
+            ,where: {sessionid: $.cookie("sessionid")} //如果无需传递额外参数，可不加该参数
+            ,method: 'post' //如果无需自定义HTTP类型，可不加该参数
+            ,cols: [[ //表头
+             {field:'productName' , align: 'center', title: '品名'}
+             ,{field: 'type',align: 'center', title: '型号'}
+            ,{field:'color', align: 'center',title: '颜色'}
+             ,{field: 'size',align: 'center', title: '尺寸',width:'150'}
+            ,{field:'price', align: 'center',title: '价格'}
+             ,{field: 'texture',align: 'center', title: '材质'}
+            ,{field:'purchaseprice', align: 'center',title: '采购价'}
+             ,{field: 'production',align: 'center', title: '产地'}
+             ,{field:'assembly', align: 'center',title: '货物类别'}
+            ,{field:'soldOut', align: 'center',title: '是否在架'}
+             ,{field: 'conventional',align: 'center', title: '属性'}
+            ,{field:'productType', align: 'center',title: '品类'}
+            ,{fixed: 'right', title: '操作',  align:'center', toolbar: '#barDemo'}
+           
+        ]]
+    });
+
+  /*  //监听工具条
+    table.on('tool(demo)', function(obj){
+      var data = obj.data;
+      if(obj.event === 'edit'){
+          alert("123");
+
+      }
+    });
+
+    //条件筛选
+    var sRoutine = '',
+        sNustomized = '',
+        sNoLowerShelf = '',
+        sLowerShelf = '';
+    //定制产品
+    $("body").delegate("#customization", "click", function () {
+        if (sNustomized == 'yes') {
+            $(this).removeClass('active');
+            sNustomized = '';
+        } else {
+            $(this).addClass('active');
+            sNustomized = 'yes';
+            $('#all').removeClass('active');
+        }
+       table.reload('product-table', {
+          url: common.address + "/product/selectListProduct"
+          ,where: {"routine": sRoutine,
+                    "customized": sNustomized,
+                    "noLowerShelf": sNoLowerShelf,
+                    "lowerShelf": sLowerShelf,
+                    "productNameOrType": $('#refer').val()} //设定异步数据接口的额外参数
+          ,page: {
+            curr: 1 //重新从第 1 页开始
+          }
+        });
+    })
+    //常规产品
+     $("body").delegate("#convention", "click", function () {
+          if (sRoutine == 'yes') {
+              $(this).removeClass('active');
+              sRoutine = '';
+          } else {
+              $(this).addClass('active');
+              sRoutine = 'yes';
+              $('#all').removeClass('active');
+          }
+          table.reload('product-table', {
+            url: common.address + "product/selectListProduct"
+            ,where: {"routine": sRoutine,
+                    "customized": sNustomized,
+                    "noLowerShelf": sNoLowerShelf,
+                    "lowerShelf": sLowerShelf,
+                    "productNameOrType": $('#refer').val()} //设定异步数据接口的额外参数
+            ,page: {
+              curr: 1 //重新从第 1 页开始
+            }
+          });
+            
+      })
+     //下架产品
+      $("body").delegate("#soldOut", "click", function () {
+            if (sLowerShelf == 'yes') {
+                $(this).removeClass('active');
+                sLowerShelf = '';
+            } else {
+                $(this).addClass('active');
+                sLowerShelf = 'yes';
+                $('#all').removeClass('active');
+            }
+            table.reload('product-table', {
+              url: common.address + "product/selectListProduct"
+              ,where: {"routine": sRoutine,
+                    "customized": sNustomized,
+                    "noLowerShelf": sNoLowerShelf,
+                    "lowerShelf": sLowerShelf,
+                    "productNameOrType": $('#refer').val()} //设定异步数据接口的额外参数
+              ,page: {
+                curr: 1 //重新从第 1 页开始
+              }
+           })
+      })
+      //正常在架
+       $("body").delegate("#normality", "click", function () {
+            if (sNoLowerShelf == 'yes') {
+                $(this).removeClass('active');
+                sNoLowerShelf = '';
+            } else {
+                $(this).addClass('active');
+                sNoLowerShelf = 'yes';
+                $('#all').removeClass('active');
+            }
+            table.reload('product-table', {
+              url: common.address + "product/selectListProduct"
+              ,where: {"routine": sRoutine,
+                    "customized": sNustomized,
+                    "noLowerShelf": sNoLowerShelf,
+                    "lowerShelf": sLowerShelf,
+                    "productNameOrType": $('#refer').val()} //设定异步数据接口的额外参数
+              ,page: {
+                curr: 1 //重新从第 1 页开始
+              }
+           })
+        })
+       //查询全部
+         $("body").delegate("#all", "click", function () {
+            $('.query button').removeClass('active');
+            $(this).addClass('active');
+            sRoutine = '';
+            sNustomized = '';
+            sNoLowerShelf = '';
+            sLowerShelf = '';
+            table.reload('product-table', {
+              url: common.address + "product/selectListProduct"
+              ,where: {} //设定异步数据接口的额外参数
+              ,page: {
+                curr: 1 //重新从第 1 页开始
+              }
+           })
+        })
+
+          //查询按钮
+         $("body").delegate("#productNameOrType", "click", function () {
+           
+            table.reload('product-table', {
+              url: common.address + "product/selectListProduct"
+              ,where: { "routine": sRoutine,
+                    "customized": sNustomized,
+                    "noLowerShelf": sNoLowerShelf,
+                    "lowerShelf": sLowerShelf,
+                    "productNameOrType": $('#refer').val()} //设定异步数据接口的额外参数
+              ,page: {
+                curr: 1 //重新从第 1 页开始
+              }
+           })
+        })
+*/
+
+
+
+
+
+
+ })
+</script>
+    <script type="text/html" id="barDemo">  
+      <img src='../../images/manage.png' class='handle' lay-event="edit">
+      
+    </script>
+	</body>
+
+</html>

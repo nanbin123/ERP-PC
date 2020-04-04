@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Table</title>
+		<link rel="stylesheet" href="../../plugins-2.5.5/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../../css/global.css" media="all">
+		<link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+		<link rel="stylesheet" href="../../css/table.css" />
+	</head>
+	<style type="text/css">
+		.layui-fluid{
+			padding: 0; 
+      margin:0;
+		}
+		.layui-card {
+			box-shadow:0 0 0;
+		}
+
+    .layui-input-block {
+    margin-left: 0;
+  }
+		.layuiadmin-card-header-auto{
+	      margin-top: 15px;
+		    height: auto;
+		}
+		.layui-card-header{
+			border-bottom: none;
+      box-shadow: 0 5px 7px #dbe7ef;
+		}
+   .layui-card-body{
+      padding:0;
+   }
+   .layui-form-item {
+    margin-bottom: 0;
+  }
+   .layui-table thead tr{
+        background-color: #f2f2f2; 
+  }
+   .layui-table thead tr span{
+        font-weight:bold;
+  }
+
+.layui-table-page{  
+    z-index: 99999;
+    position: fixed;
+    bottom: 0;
+}  
+.handle{
+  width: 20px;
+  cursor: pointer;
+}
+.layui-btn{
+  background-color: #7B7DE5;
+  border-radius: 4px;
+}
+	</style>
+	<body>
+
+
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+        <div class="layui-form-item">
+         
+          <div class="layui-inline" style="width: 85%;border-radius: 20px">
+              <input type="text" name="username" placeholder="请输入用户名查询"
+              style="border-radius: 4px;text-align: center" autocomplete="off" class="layui-input">
+          </div>
+          <div class="layui-inline" style="width: 10%;border-radius: 20px">
+            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit="" lay-filter="LAY-user-front-search">
+              <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="layui-card-body">
+      		<table id="finance-table" class="layui-table"  lay-skin="nob" lay-filter="demo"></table>
+	  </div>
+	</div>
+</div>
+		
+	
+			           
+
+		<script type="text/javascript" src="../../plugins-2.5.5/layui/layui.js"></script>
+		<script>
+	  layui.config({
+        base: '../../js/'
+    }).extend({ //设定模块别名
+        cookie: 'cookie'  // 如果cookie.js是在根目录，也可以不用设定别名,因为我cookie.js的是在根目录，所以这句话其实也不用写也行。
+    });
+    layui.use(['table','jquery','layer','cookie'], function(){
+        var $= layui.jquery;
+        var table = layui.table;
+        var cookie=layui.cookie;
+        //“方法级渲染”配置方式
+        table.render({
+            elem: '#finance-table'
+            /*,height:"full-110"*/
+            ,skin:"nob"
+            ,even:"true"
+            ,url: "http://101.132.155.107:8080/new_product/menu/selectUser"
+            ,page: true //开启分页
+            ,where: {sessionid: $.cookie("sessionid")} //如果无需传递额外参数，可不加该参数
+            ,method: 'post' //如果无需自定义HTTP类型，可不加该参数
+            ,request: {
+                pageName:'pageNo' //页码的参数名称，默认：page
+                ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            } //如果无需自定义请求参数，可不加该参数
+            ,done: function(res, curr, count){         
+            //如果是异步请求数据方式，res即为你接口返回的信息。
+            //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+            console.log(res);
+            
+            //得到当前页码
+            console.log(curr); 
+            
+            //得到数据总量
+            console.log(count);
+          }
+            ,parseData: function(res){ //res 即为原始返回的数据
+                return {
+                    "code": 0, //解析接口状态
+                    "msg": "数据加载成功", //解析提示文本
+                    "count": res.total, //解析数据长度数据总数
+                    "data": res.list //解析数据列表
+            };
+            }
+            ,cols: [[ //表头
+             {field:'username' , align: 'center', title: '姓名'}
+            ,{field: 'phone',align: 'center', title: '电话'}
+            ,{field:'position', align: 'center',title: '职位'}
+            ,{fixed: 'right', title: '操作',  align:'center', toolbar: '#barDemo'}
+           
+        ]]
+    });
+
+    //监听工具条
+    table.on('tool(demo)', function(obj){
+      var data = obj.data;
+      if(obj.event === 'edit'){
+          alert("123");
+
+      }
+    });
+      
+  });
+		</script>
+    <script type="text/html" id="barDemo">  
+      <img src='../../images/manage.png' class='handle' lay-event="edit">
+      
+    </script>
+	</body>
+
+</html>
