@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../../plugins-2.5.5/layui/css/layui.css" media="all" />
+</head>
+<style>
+    .layui-fluid{
+        padding:15px;
+    }
+    .layuiadmin-card-header-auto {
+        padding-top: 15px;
+        padding-bottom: 15px;
+        height: auto;
+    }
+</style>
+<body style="background-color: #f2f2f2">
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header layuiadmin-card-header-auto">
+                <button type="button" class="layui-btn layui-btn-warm save"  data-type="add">添加</button>
+            </div>
+            <div class="layui-card-body">
+                <table id="supplier-table" class="layui-table"  style="color: #7B7DE5" lay-skin="nob" lay-filter="supplier"></table>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../../plugins-2.5.5/layui/layui.js"></script>
+    <script>
+        layui.config({//自定义模块路径
+            base: '../../js/'
+        })
+        layui.use(['table','jquery','layer','form','cookie','common'], function(){
+            var $= layui.jquery;
+            var table = layui.table;
+            var cookie=layui.cookie;
+            var common = layui.common;
+            var form = layui.form;
+            var supplierTable=table.render({
+                elem: '#supplier-table'
+                ,id:"id"
+                ,size:"lg"
+                ,url: common.address + "purchase/selectPurchaseSupplier"
+                ,where: {sessionid: $.cookie("sessionid")}
+                ,method: 'post' //如果无需自定义HTTP类型，可不加该参数
+                ,cols: [[ //表头
+                     {field:'zizeng',templet:'#zizeng',width:'4%', align:'center'}
+                    ,{field:'name' , align: 'center', title: '供应商名称',width:'17%'}
+                    ,{field:'address' , align: 'center', title: '供应商地址',width:'30%'}
+                    ,{field:'contacts' , align: 'center', title: '联系人',width:'12%'}
+                    ,{field:'telephone' , align: 'center', title: '电话',width:'12%'}
+                    ,{field:'phone' , align: 'center', title: '手机',width:'12%'}
+                    ,{field:'remark' , align: 'center', title: '备注',width:'20%'}
+                    ,{fixed: 'right',title: '操作',  align:'center',width:'14%', toolbar: '#toVoid'}
+
+                ]]
+            });
+
+            //监听行工具事件
+            table.on('tool(supplier)', function(obj){ //test 是 table 原始容器的属性 lay-filter="对应的值"
+                var trdata = obj.data //获得当前行数据
+                    ,layEvent = obj.event; //获得 lay-event 对应的值
+                if(layEvent === 'del'){
+                    layer.confirm('真的删除行么', function(index){
+                        $.ajax({
+                            url: common.address + "purchase/updatePurchaseSupplier",
+                            method: "POST",
+                            data: { "sessionid": $.cookie("sessionid"), "id": trdata.id,"delflag":"1"},
+                            success:function(res){
+                                obj.del(); //删除对应行（tr）的DOM结构
+                                layer.msg("删除成功");
+                            }
+                        })
+                    });
+                } else if(layEvent === 'edit'){
+                    layer.open({
+                        type: 2
+                        ,title: '修改供应商'
+                        ,content: 'supplier_add.html'
+                        ,maxmin: true
+                        ,area: ['700px', '450px']
+                        ,btn: ['确定', '取消']
+                        ,yes: function(index, layero){
+                            var iframeWindow = window['layui-layer-iframe'+ index];
+                            //点击确认触发 iframe 内容中的按钮提交
+                            var submit = layero.find('iframe').contents().find("#LAY-supplier-front-submit");
+                            //监听提交
+                            iframeWindow.layui.form.on('submit(LAY-supplier-front-submit)', function(supplierdata){
+                                var field = supplierdata.field; //获取提交的字段
+                                $.ajax({
+                                    url: common.address +"purchase/updatePurchaseSupplier",
+                                    method: "POST",
+                                    data:{ "sessionid": $.cookie("sessionid"),"id":trdata.id,
+                                        "name":field.name,"address":field.address,"contacts":field.contacts,
+                                        "telephone":field.telephone,"phone":field.phone,"remark":field.remark},
+                                    success:function(res){
+                                        layer.msg('修改商添加成功');
+                                        supplierTable.reload();
+                                        layer.close(index); //关闭弹层
+                                    }
+                                });
+                            });
+                            submit.trigger('click');
+                        },success: function(layero, index){
+                            var supplierForm = layero.find('iframe').contents().find('#LAY-form-supplier');
+                            supplierForm.find('input[name="name"]').val(trdata.name);
+                            supplierForm.find('input[name="address"]').val(trdata.address);
+                            supplierForm.find('input[name="contacts"]').val(trdata.contacts);
+                            supplierForm.find('input[name="telephone"]').val(trdata.telephone);
+                            supplierForm.find('input[name="phone"]').val(trdata.phone);
+                            supplierForm.find('textarea[name="remark"]').val(trdata.remark);
+                        }
+                    });
+                }
+            });
+            var active = {
+                add: function(){
+                    layer.open({
+                        type: 2
+                        ,title: '添加供应商'
+                        ,content: 'supplier_add.html'
+                        ,maxmin: true
+                        ,area: ['700px', '450px']
+                        ,btn: ['确定', '取消']
+                        ,yes: function(index, layero){
+                            var iframeWindow = window['layui-layer-iframe'+ index];
+                            //点击确认触发 iframe 内容中的按钮提交
+                            var submit = layero.find('iframe').contents().find("#LAY-supplier-front-submit");
+                            //监听提交
+                            iframeWindow.layui.form.on('submit(LAY-supplier-front-submit)', function(supplierdata){
+                                var field = supplierdata.field; //获取提交的字段
+                                $.ajax({
+                                    url: common.address +"purchase/insertPurchaseSupplier",
+                                    method: "POST",
+                                    data:{ "sessionid": $.cookie("sessionid"),
+                                        "name":field.name,"address":field.address,"contacts":field.contacts,
+                                        "telephone":field.telephone,"phone":field.phone,"remark":field.remark},
+                                    success:function(res){
+                                        layer.msg('供应商添加成功');
+                                        supplierTable.reload();
+                                        layer.close(index); //关闭弹层
+                                    }
+                                });
+                            });
+                            submit.trigger('click');
+                        }
+                    });
+                }
+            };
+
+        $('.layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        })
+
+
+</script>
+    <!--操作-->
+    <script type="text/html" id="toVoid">
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">
+            <i class="layui-icon layui-icon-edit"></i>编辑
+        </a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">
+            <i class="layui-icon layui-icon-delete"></i>删除
+        </a>
+    </script>
+    <!--序号自增-->
+    <script type="text/html" id="zizeng">
+        {{d.LAY_TABLE_INDEX+1}}
+    </script>
+</body>
+</html>

@@ -90,7 +90,6 @@
           padding: 0 15px;
           color: #676a6c;
           background-color: buttonface;
-
       }
       .layui-btn:hover {
           opacity: 1;
@@ -302,6 +301,7 @@ layui.use(['table','jquery','layer','laydate','cookie','form','common'], functio
     //类别筛选
     $(".selectBtn").on('click', function () {
         var data = form.val("selectFinanceForm");
+
         if($(this).hasClass("activeFocu"))
             $(this).removeClass("activeFocu");
         else

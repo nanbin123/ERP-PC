@@ -4,472 +4,157 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>融恒科技—企业erp管理系统</title>    
-    <link rel="stylesheet" href="../../css/product/category.css">
     <link rel="stylesheet" href="../../plugins-2.5.5/layui/css/layui.css" media="all" />
-  
 </head>
-<body>
-    <div class="box">
-        <div class="right" style="position: static">
-            <div class="boxx">
-                    <div class="select">
-                        <div class="sousuo">
-                            品类列表
-                        </div>
-                        <button class="delete">删除</button>
-                        <button class="revamp">修改</button>
-                    </div>
-                    <div class="categoryList">
-                        <div class="left1">
-                            <div class="slideLeft">
-                                <div class="newConstruction">
-                                    + 新建主类
-                                </div>
-                         
-                                <div class="mask4"></div>
-                                <div class="import4">
-                                    <div class="borderBottom">
-                                        <div class="close4"><img src="img/gb.png" alt=""></div>
-                                        <h4>修改主类</h4>
-                                    </div>
-                                    <div class="xiugaiZl">
-                                        <input type="text4" placeholder="请输入您新的主题名称 最多4位字符" maxlength="4" class="amendTitle">
-                                    </div>
-                                    <div class="confirm4">确定</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="right">
-                            <div class="choice">
-                                请选择您的主类
-                            </div>
-                            <div class="rightOne">
-                                <div class="slideRight">                 
-
-                                    <div class="buildSub">
-                                        + 新建子类
-                                    </div>
-                                  
-                                    <div class="mask3"></div>
-                                    <div class="import3">
-                                        <div class="borderBottom">
-                                            <div class="close3"><img src="img/gb.png" alt=""></div>
-                                            <h4>修改子类名称</h4>
-                                        </div>
-                                        <div class="pic_module1">
-                                           
-                                        </div>
-                                        <div class="pic_module1_top">
-                                            <input type="text" placeholder="请输入新的子类名称 最多5位字符" maxlength="5" class="modifysub">
-                                        </div>
-                                        <div class="confirm3">确定</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-
-
+<style>
+    .layui-fluid{
+        padding:15px;
+    }
+    .layuiadmin-card-header-auto {
+        padding-top: 15px;
+        padding-bottom: 15px;
+        height: auto;
+    }
+</style>
+<body style="background-color: #f2f2f2">
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header layuiadmin-card-header-auto">
+                <button type="button" class="layui-btn layui-btn-warm save"  data-type="add">添加</button>
+            </div>
+            <div class="layui-card-body">
+                <table id="category-table" class="layui-table"  style="color: #7B7DE5" lay-skin="nob" lay-filter="category-table"></table>
+            </div>
         </div>
-
     </div>
 
+    <script type="text/javascript" src="../../plugins-2.5.5/layui/layui.js"></script>
+    <script>
+        layui.config({//自定义模块路径
+            base: '../../js/'
+        })
+        layui.use(['table','jquery','layer','cookie','common'], function(){
+            var $= layui.jquery;
+            var table = layui.table;
+            var cookie=layui.cookie;
+            var common = layui.common;
 
-<script type="text/javascript" src="../../plugins-2.5.5/layui/layui.js"></script>
-
- <script>
-
-
-
-    layui.config({//自定义模块路径
-        base: '../../js/'
-    })
-    layui.use(['jquery','layer','cookie','common'], function(){
-        var $= layui.jquery;       
-        var cookie=layui.cookie;
-        var common = layui.common;
-        var mainType = [];
-        var sid = 0;
-        var zhuId;  
-        selectCategory();   
-        function selectCategory(){ 
-            $.ajax({
-                    url: common.address + "product/selectCategory",
-                    method: "POST",
-                    data:{ "sessionid": $.cookie("sessionid")},
-                    success:function(res){ 
-                        mainType = res;
-                        var mess = "";
-                        $.each(mainType,function(n,value){
-                            sid++
-                            var mm = "";
-                            mm += "<div class='mainclassOne' id='" + value.id + "'><div class='remove'>X</div><span id='main" + sid + "'>" + value.category + "</span><i class='layui-icon layui-icon-next'></i> </div>";
-                            mess += mm;
-                        })
-                        $(mess).insertBefore($(".newConstruction"));
-                        if(mainType.length>0){
-                            $('.mainclassOne:first').click();
-                        }
-                    }
+            var categoryTable=table.render({
+                elem: '#category-table'
+                ,id:"id"
+                ,size:"lg"
+                ,url: common.address + "product/selectCategory"
+                ,where: {sessionid: $.cookie("sessionid")} //如果无需传递额外参数，可不加该参数
+                ,method: 'post' //如果无需自定义HTTP类型，可不加该参数
+                ,cols: [[ //表头
+                     {field:'zizeng',templet:'#zizeng',width:'5%', align:'center'}
+                    ,{field:'category' , align: 'center', title: '分类名',width:'78%'}
+                    ,{title: '操作',  align:'center',width:'17%', toolbar: '#toVoid'}
+                ]]
             });
-        }
-        $("body").delegate(".mainclassOne","click",function(){
-            var index = $(this).index();
-            $(".mainclassOne").eq(index).addClass("pictUp").siblings().removeClass("pictUp");   //siblings 除自己以外的同级元素
-            if(index == -1){
-                    $(".mainclassOne").eq(0).addClass("pictUp").siblings().removeClass("pictUp");
-            }
-                  
-            $(".choice").css("display","none");
-            $(".rightOne").css("display","block");
-            $(".subclassOne").removeClass("selected");           
-            zhuId = $(this)[0].id;   //主类id
-            $(".subclassOne").remove();
-            subClass();
-        })
 
-        var subList = [];
-        function subClass(){       //查询子类          
-            $.ajax({
-                url: common.address + "product/selectCategoryB",
-                method: "POST",
-                data: { "sessionid": $.cookie("sessionid"), "productCategoryId": zhuId },
-                success:function(res){                 
-                    subList = res;
-                    var mess = "";
-                    $.each(subList,function(n,value){
-                        sid ++;
-                        var mm = "";
-                        mm += "<div class='subclassOne' id='" + value.id + "'><div class='omit'>X</div><div id='ce" + sid + "' class='ceshi1'><h4>" + value.category + "</h4></div></div>";
-                        mess += mm;
-                    })
-                    $(".buildSub").before(mess)
+
+            var active = {
+                add: function(){
+                    layer.open({
+                        type: 2
+                        ,title: '添加产品分类'
+                        ,content: 'category_add.html'
+                        ,area: ['450px', '200px']
+                        ,btn: ['确定', '取消']
+                        ,yes: function(index, layero){
+                            var categoryadd = layero.find('iframe').contents().find("#LAY-category-form");
+                            var category=categoryadd.find('input[name="category"]').val();
+                               $.ajax({
+                                   url: common.address +"product/insertProductCategory",
+                                   method: "POST",
+                                   data:{ "sessionid": $.cookie("sessionid"),
+                                       "category":category.replace(/\s/g,"")},
+                                   success:function(res){
+                                       layer.msg('产品分类添加成功');
+                                       categoryTable.reload();
+                                       layer.close(index); //关闭弹层
+                                   }
+                               });
+                        }
+                    });
                 }
-            })
-        }
-        //新建主类别
-        $(".newConstruction").click(function(){   
-            layer.prompt({title: '添加一级类别，并确认',maxlength: 4}, function(text, index){             
-               $.ajax({
-                url: common.address + "product/createcategory",
-                method: "POST",
-                data: { "sessionid": $.cookie("sessionid"), "category": text },
-               success:function(res){ 
-                    $(".mainclassOne").remove();
-                   selectCategory();
-                   layer.close(index);
-                   layer.msg('添加一级类别：'+ text+'成功');                    
-                }
-            })       
-            });           
-        })
-        //新建子类别
-         $("body").delegate(".buildSub","click",function(){
-           layer.prompt({title: '添加二级类别，并确认',maxlength: 4}, function(text, index){
-               $.ajax({
-                url: common.address + "product/insertCategoryB",
-                method: "POST",
-                data: { "sessionid": $.cookie("sessionid"), "productCategoryId": zhuId, "category": text },
-                success:function(res){ 
-                    $(".subclassOne").remove();
-                    subClass();
-                   layer.close(index);
-                   layer.msg('添加二级级类别：'+ text+'成功');                    
-                }
-            })       
-            });           
-        });
- 
-
-
-
-      
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      /*  aa( sessionid )
-      
-        function amend ( mid,vv ){     //修改主类名
-            $.ajax({
-                url: url + "/product/updateCategory",
-                method: "POST",
-                data: { "sessionid": sessionid, "id": mid, "category": vv },
-                success: (res)=>{
-                    if( res.state == -200 ){
-                        window.location.href="quanxian.html"
-                    }
-                    console.log(res);
-                    aa( sessionid )
-                    $(".mask4").css("display","none");
-                    $(".import4").css("display","none");
-                }
-            })
-        }
-        function deleteMain( mid ){     //删除主类
-            $.ajax({
-                url: url + "/product/deleteCategory",
-                method: "POST",
-                data: { "sessionid": sessionid, "id": mid },
-                success: (res)=>{
-                    if( res.state == -200 ){
-                        window.location.href="quanxian.html"
-                    }
-                    console.log(res);
-                    aa( sessionid );
-                    $(".rightOne").css("display", "none");
-                }
-            })
-        }
-        var subList = [];
-        function subClass(  ){       //查询子类
-            $.ajax({
-                url: url + "/product/selectCategoryB",
-                method: "POST",
-                data: { "sessionid": sessionid, "productCategoryId": zhuId },
-                success: (res)=>{
-                    if( res.state == -200 ){
-                        window.location.href="quanxian.html"
-                    }
-                    console.log(res);
-                    subList = res;
-                    var mess = "";
-                    $.each(subList,function(n,value){
-                        sid ++;
-                        var mm = "";
-                        mm += "<div class='subclassOne' id='" + value.id + "'><div class='omit'>X</div><div id='ce" + sid + "' class='ceshi1'><h4>" + value.category + "</h4></div></div>";
-                        mess += mm;
-                    })
-                    $(".buildSub").before(mess)
-                }
-            })
-        }
-        var subclassId = 0;
-     
-        function amendSub( subid,vv ){        //  修改子类
-            $.ajax({
-                url: url + "/product/updateCategoryB",
-                method: "POST",
-                data: { "sessionid": sessionid, "id": subid, "category": vv },
-                success: (res)=>{
-                    if( res.state == -200 ){
-                        window.location.href="quanxian.html"
-                    }
-                    console.log(res)
-                    subClass();
-                    $(".mask3").css("display","none");
-                    $(".import3").css("display","none");
-                    $(".center_img img").remove();
-                    $(".center_img1 img").remove();
-                }
-            })
-        }
-        function deleteSub( subid ){        //删除子类
-            $.ajax({
-                url: url + "/product/deleteCategoryB",
-                method: "POST",
-                data: { "sessionid": sessionid, "id": subid },
-                success: (res)=>{
-                    console.log(res);
-                    subClass();
-                }
-            })
-        }
-        $("body").delegate(".mainclassOne","click",function(){
-            modifyTitle = this;
-            index = $(this).index();
-            $(".mainclassOne").eq(index).addClass("pictUp").siblings().removeClass("pictUp");   //siblings 除自己以外的同级元素
-            if(index == -1){
-                $(".mainclassOne").eq(0).addClass("pictUp").siblings().removeClass("pictUp");
-            }
-            $(".choice").css("display","none");
-            $(".rightOne").css("display","block");
-            $(".subclassOne").removeClass("selected");
-            mainId = $(modifyTitle).children()[1].id;       //获取span的id 修改里面的值
-            mainclass = true;
-            zhuId = $(this)[0].id;   //主类id
-            $(".subclassOne").remove();
-            subClass();
-        })
-        $(".newConstruction").click(function(){
-            $(".mask").css("display","block");
-            $(".import").css("display","block");
-        })
-        $(".close").click(function(){
-            $(".mask").css("display","none");
-            $(".import").css("display","none");
-            $(".mainTitle").val("");
-        })
-
-        var zid = 0;
-        $(".confirm").click(function(){
-            zid ++;
-            var vv = $(".mainTitle").val();
-            if(!vv){
-                alert("主类名不能为空哦")
-            } else {
-                $(".mainclassOne").remove();
-                newMain(sessionid,vv)
-                $(".mask").css("display","none");
-                $(".import").css("display","none");
-                $(".mainTitle").val("");
-            }
-        })
-        $("body").delegate(".buildSub","click",function(){
-            $(".mask2").css("display","block");
-            $(".import2").css("display","block");
-            mainclass = false;
-        });
-        $("body").delegate(".close2","click",function(){
-            $(".mask2").css("display","none");
-            $(".import2").css("display","none");
-            $(".center_img img").remove();
-            $(".mainsub").val("");
-        })
-
-        $("body").delegate(".confirm2","click",function(){
-            console.log(zhuId)
-            var svv = $(".mainsub").val();
-            subclassId ++;
-            if(!svv){
-                alert('子类名不能为空哦','warning');
-            } else {
-                $(".subclassOne").remove();
-                addSub( svv )
             };
-        });
-        $(".delete").click(
-            function(){
-                if($(".remove").css("display")=="none"){
-                    $(".remove").show();
-                    $(".omit").show();
-                } else {
-                    $(".remove").hide();
-                    $(".omit").hide();
+
+
+            //监听行工具事件
+            table.on('tool(category-table)', function(obj){ //test 是 table 原始容器的属性 lay-filter="对应的值"
+                var trdata = obj.data //获得当前行数据
+                    ,layEvent = obj.event; //获得 lay-event 对应的值
+                if(layEvent === 'del'){
+                    layer.confirm('真的删除行么', function(index){
+                        $.ajax({
+                            url: common.address +"product/updateProductCategory",
+                            method: "POST",
+                            data:{"sessionid": $.cookie("sessionid"),"id":trdata.id,"delflag":"1"},
+                            success:function(res){
+                                obj.del(); //删除对应行（tr）的DOM结构
+                                //categoryTable.reload();
+                                layer.msg("删除成功");
+                            }
+                        })
+                    });
+                } else if(layEvent === 'edit'){
+                    layer.open({
+                        type: 2
+                        ,title: '添加供应商'
+                        ,content: 'category_add.html'
+                        ,area: ['450px', '200px']
+                        ,btn: ['确定', '取消']
+                        ,yes: function(index, layero){
+                            var categoryadd = layero.find('iframe').contents().find("#LAY-category-form");
+                            var category=categoryadd.find('input[name="category"]').val();
+                            $.ajax({
+                                url: common.address +"product/updateProductCategory",
+                                method: "POST",
+                                data:{ "sessionid": $.cookie("sessionid"),"id":trdata.id,
+                                    "category":category.replace(/\s/g,"")},
+                                success:function(res){
+                                    layer.msg('产品类别修改成功');
+                                    obj.update({category:category})
+                                    //categoryTable.reload();
+                                    layer.close(index); //关闭弹层
+                                }
+                            });
+                        },success: function(layero, index){
+                            var categoryForm = layero.find('iframe').contents().find('#LAY-category-form');
+                            categoryForm.find('input[name="category"]').val(trdata.category);
+
+                        }
+                    });
                 }
-            }
-        )
-        $("body").delegate(".remove","click",function(){
-            mainclassId = $(this).parent()[0].id;
-            console.log(mainclassId)
-            var subscript = $("#"+mainclassId).index();        //获取次id的下表，删掉右侧同样下标的子类
-            var msg = confirm("您确定要删除此主类名吗？")
-            if(msg){
-                $(".mainclassOne").remove();
-                deleteMain( mainclassId )
-            }
-        });
-        var xiaoclass = false;
-        var modifyData;
-        var group;
-        var littieId;
-        $("body").delegate(".ceshi1","click",function(e){
-            e.stopPropagation;
-            modifyData = this;
-            littieId = $(this).parent()[0].id;
-            group = $(this)[0].id;
-            $("#"+littieId).addClass("selected").siblings().removeClass("selected");
-            xiaoclass = true;
-            mainclass = false;
-        });
-        $("body").delegate(".omit","click",function(e){
-            e.stopPropagation
-            var smallId = $(this).parent()[0].id
-            var hint = confirm("您确定要删除此子类名吗？")
-            if(hint){
-                $(".subclassOne").remove();
-                deleteSub(smallId)
-                xiaoclass = false;
-            }
-        })
-        //  添加选择图片
-        $("body").delegate(".btn_choose","click",function(){
-            src = "img/1.2.jpg";
-            $(".center_img").append("<img src='" + src + "' id='img1'>");
-            $(this).text("重新选择");
-        });
-        //   修改图片
-        $("body").delegate(".btn_choose1","click",function(){
-            img = "img/grass3.png"
-            $(".center_img1 img").attr("src",img);
-            $(this).text("重新选择");
-        })
-        var ceshi = false;
-        $("body").delegate(".revamp","click",function(){
-            if(mainclass){      //修改主类的名
-                var tt = $("#"+mainId).text();
-                $(".mask4").css("display","block");
-                $(".import4").css("display","block");
-                $("body").delegate(".close4","click",function(){
-                    $(".mask4").css("display","none");
-                    $(".import4").css("display","none");
-                    $(".amendTitle").val();
-                });
-                $(".amendTitle").val(tt.trim());       //trim清除多余的空格
-                $("body").delegate(".confirm4","click",function(){
-                    var newValue = $(".amendTitle").val();
-                    $(".mainclassOne").remove();
-                    amend( zhuId,newValue );
-                    window.location.reload(); //刷新网页
-                })
-                mainclass = false;
-            } else if(xiaoclass){       //修改子类的名
-                $(".mask3").css("display","block");
-                $(".import3").css("display","block");
-                $("body").delegate(".close3","click",function(){
-                    $(".mask3").css("display","none");
-                    $(".import3").css("display","none");
-                    // $(".center_img1 img").remove();
-                    $(".moifysub").val("");
-                    img = "";
-                    src = "";
-                })
-                $(".modifysub").val($("#"+group).text().trim());     //trim去除没用的空格               
-                $("body").delegate(".confirm3","click",function(){
-                    var newVal = $(".modifysub").val();
-                    $(".subclassOne").remove();
-                    amendSub( littieId,newVal )                   
-                    window.location.reload(); //刷新网页
-                })
-                xiaoclass = false;
-            } else {
-                alert("请选中一个类名");
-            }
-        })
+            });
 
 
 
-        $("body").delegate(".check","click",function(){
-            var warehouseId = $(this).parent()[0].id;
-            console.log($(this).parent()[0].id)
-            $(".warehouseMask").css("display","block")
-        })
-        $("body").delegate(".cancel","click",function(){
-            $(".warehouseMask").css("display","none")
-        })
-*/
 
-   
+
+
+            $('.layui-btn').on('click', function(){
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+
+
+        })
+</script>
+    <!--操作-->
+    <script type="text/html" id="toVoid">
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">
+            <i class="layui-icon layui-icon-edit"></i>编辑
+        </a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">
+            <i class="layui-icon layui-icon-delete"></i>删除
+        </a>
+    </script>
+    <!--序号自增-->
+    <script type="text/html" id="zizeng">
+        {{d.LAY_TABLE_INDEX+1}}
     </script>
 </body>
 </html>

@@ -484,7 +484,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 
                   //解析工具列模板
                   if(item3.toolbar){
-                    return laytpl($(item3.toolbar).html()||'').render(tplData);
+                      var item3Toolbar=item3.toolbar;
+                    return laytpl($(item3Toolbar).html()||'').render(tplData);
                   }
                   return parseTempData(item3, content, tplData);
                 }()
@@ -538,7 +539,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
                           ,checkName = table.config.checkName;
                       //解析工具列模板
                       if(item4.toolbar){
-                        return laytpl('<span lay-event="edit">修改</span>'||'').render(tplData);
+                        return '<span lay-event="edit">修改</span>'||'';
                       }
                      // alert(JSON.stringify(tplData));
                       return parseTempData(item4, content, tplData);

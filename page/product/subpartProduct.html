@@ -65,18 +65,16 @@
 		<table class="layui-table" lay-skin="nob" style="margin-bottom: 20px">
 			<thead>
 			<tr>
-				<th>物料编号</th>
 				<th>品名</th>
 				<th>型号</th>
 				<th>颜色</th>
 				<th>尺寸</th>
-				<th>价格</th>
+				<th>零售价</th>
 				<th>材质</th>
 				<th>采购价</th>
 				<th>产地</th>
 				<th>是否在架</th>
 				<th>属性</th>
-				<th>品类</th>
 			</tr>
 			</thead>
 			<tbody></tbody>
@@ -114,7 +112,6 @@
 
 
 		$("body").delegate(".addProduct", "click", function () {
-				//弹出即全屏
 			var index = layer.open({
 				type: 2,
 				content: 'productQuery.html',
@@ -134,18 +131,16 @@
 							layui.each(checkStatus, function(i1, item1){
 								$(".layui-table tbody").append(//追加数据
 								'<tr id="'+item1.id+'">'+
-								'<td>0000001</td>'+
 								'<td>'+item1.productName+'</td>'+
 								'<td>'+item1.type+'</td>'+
 								'<td>'+item1.color+'</td>'+
 								'<td>'+item1.size+'</td>'+
-								'<td>'+item1.price+'</td>'+
+								'<td>'+item1.retailPrice+'</td>'+
 								'<td>'+item1.texture+'</td>'+
-								'<td>'+item1.purchaseprice+'</td>'+
+								'<td>'+item1.purchasePrice+'</td>'+
 								'<td>'+item1.production+'</td>'+
 								'<td>'+item1.soldOut+'</td>'+
 								'<td>'+item1.conventional+'</td>'+
-								'<td>'+item1.productType+'</td>'+
 								'</tr>'
 								);
 							})

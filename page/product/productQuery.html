@@ -67,7 +67,6 @@
         <div class="layui-form layui-card-header layuiadmin-card-header-auto">
             <div class="layui-form-item">
                 <div class="layui-inline" style="width: 70%">
-                   <!-- <label class="layui-form-label">品名,型号:</label>-->
                     <div class="layui-input-inline"   style="width: 100%">
                         <input id="refer" type="text" name="" placeholder="请输入品名或者型号查询"
                                style="border-radius: 4px;text-align: center ;width: 100%" autocomplete="off" class="layui-input">
@@ -120,18 +119,20 @@
             ,even:"true"
             ,url: common.address +  "product/selectListProduct"
             ,page: true //开启分页
-            ,where: {sessionid: $.cookie("sessionid")} //如果无需传递额外参数，可不加该参数
+            ,where: {
+                sessionid: $.cookie("sessionid"),
+                state:'2'
+            } //如果无需传递额外参数，可不加该参数
             ,method: 'post' //如果无需自定义HTTP类型，可不加该参数
             ,cols: [[ //表头
                  {type:'checkbox'}
-                ,{field:'productName' , align: 'center', title: '物料编号'}
                 ,{field:'productName' , align: 'center', title: '品名'}
                 ,{field: 'type',align: 'center', title: '型号'}
                 ,{field:'color', align: 'center',title: '颜色'}
                 ,{field: 'size',align: 'center', title: '尺寸'}
-                ,{field:'price', align: 'center',title: '价格'}
+                ,{field:'retailPrice', align: 'center',title: '零售价'}
                 ,{field: 'texture',align: 'center', title: '材质'}
-                ,{field:'purchaseprice', align: 'center',title: '采购价'}
+                ,{field:'purchasePrice', align: 'center',title: '采购价'}
                 ,{field: 'production',align: 'center', title: '产地'}
                 ,{field: 'conventional',align: 'center', title: '属性'}
                 ,{field: 'id',align: 'center', title: 'id',hide:true}

@@ -28,18 +28,7 @@
     .layui-form-item .layui-inline {
         margin-bottom: 25px;
     }
-    .chooise {
-      width: 9%;
-      height: 0.45rem;
-      background: #F0F4FC;
-    }
-    .chooise img {
-      width: 25px;
-      position: absolute;
-      top: 8px;
-      right: 15px;
-      cursor: pointer;
-    }
+
 /*     .layui-disabled{
     color: initial;
 } */
@@ -181,6 +170,11 @@
   border: 1px solid #7B7DE5;
   color: #7B7DE5;
 }
+.layui-upload-img {
+    width: 92px;
+    height: 92px;
+    margin: 0 10px 10px 0;
+}
 
 
 </style>
@@ -200,7 +194,7 @@
 
     <div class="layui-card-body">
         <form  id="addProductForm" class="layui-form" action="" lay-filter="example">
-                        <div class="layui-form-item">
+                <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">品名:</label>
                     <div class="layui-input-inline">
@@ -241,58 +235,65 @@
                  <div class="layui-inline">
                     <label class="layui-form-label">采购价:</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="purchaseprice" placeholder="请输入产品采购价" class="layui-input">
+                        <input type="text" name="purchasePrice" placeholder="请输入产品采购价" class="layui-input">
                     </div>
                 </div>
                  <div class="layui-inline">
                     <label class="layui-form-label">零售价:</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="price" placeholder="请输入产品零售价" class="layui-input">
+                        <input type="text" name="retailPrice" placeholder="请输入产品零售价" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
                         <label class="layui-form-label">产品状态:</label>
                         <div class="layui-input-inline">
-                           <select name="conventional"  lay-filter="aihao">
+                           <select name="conventional">
                             <option value=""></option>
                             <option value="0">常规产品</option>
-                            <option value="1" selected="">定制产品</option>                            
+                            <option value="1">定制产品</option>
                            </select>
                         </div>
                 </div>
                  <div class="layui-inline">
                         <label class="layui-form-label">产品货架:</label>
                         <div class="layui-input-inline">
-                           <select name="soldOut"  lay-filter="aihao">
+                           <select name="soldOut">
                             <option value=""></option>
-                            <option value="0">正常在架</option>
-                            <option value="1" selected="">下架产品</option>                            
+                            <option value="0" selected>正常在架</option>
+                            <option value="1" >下架产品</option>
                            </select>
                         </div>
                 </div>
                  <div class="layui-inline">
                         <label class="layui-form-label">货物状态:</label>
                         <div class="layui-input-inline">
-                           <select name="assembly"  lay-filter="aihao">
+                           <select name="state" >
                             <option value=""></option>
                             <option value="0">整件</option>
-                            <option value="1">套件</option>
                             <option value="2">子件</option>
+                            <option value="1">套件</option>
                            </select>
                         </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">产品类型:</label>
-                    <div class="layui-input-inline cplx">
-                        <input type="text"   name ="productCategory" placeholder="请选择您的品类" disabled class="layui-input  layui-disabled">
-                        <input type="text" name="productCategoryBid"  class="layui-input">
-                        <!--style="display:none"-->
+                    <label class="layui-form-label">产品分类:</label>
+                    <div class="layui-input-inline">
+                        <select name="productCategoryId" id="productCategoryId">
+
+                        </select>
                     </div>
-                    <div class="chooise">
-                        <img src="../../images/select.png" class="search cplx">
-                     </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">选择供应商:</label>
+                    <div class="layui-input-inline">
+                        <select name="purchaseSupplierId" id="productSupplier" >
+
+                        </select>
+                    </div>
                 </div>
             </div>
+
+
         </form>
     </div>
     </div>
@@ -305,120 +306,72 @@
         layui.config({//自定义模块路径
             base: '../../js/'
         })
-        layui.use(['table','jquery','layer','cookie','form','element','common'], function(){
+        layui.use(['table','jquery','layer','cookie','form','upload','element','common'], function(){
              var $= layui.jquery;
              var cookie=layui.cookie;
              var form = layui.form;
              var element = layui.element;
-            var common = layui.common;
+             var common = layui.common;
              var layerindex;
+             var upload = layui.upload;
 
-            $("body").delegate(".cplx","click",function(){
-                $.post(common.address + 'product/selectCategory',
-                 {sessionid: $.cookie("sessionid")}, function(res){  
-                
-                  var mess = "";
-                   $.each(res,function(n,value){
-                          mess+='<div class="mainclassOne" id="' + value.id + '">'+
-                                '<span id="main1">'+value.category+'</span>'+
-                                '<i class="layui-icon layui-icon-next"></i> '+
-                            '</div>'
-                    }); 
-                                                               
-                        layerindex = layer.open({
-                        type: 1,
-                        skin: 'demo-class',
-                        title: ['产品类型', 'font-size:18px'],
-                        area: ['750px', '400px'],
-                        offset: ['10px', '100px'],                
-                        content:'<div class="maskData">'+
-                                    '<div class="left1">'+
-                                        '<div class="slideLeft">'+
-                                                mess+
-                                        '</div>'+
-                                    '</div>'+
-                                    '<div class="right">'+
-                                        '<div class="choice">'+
-                                            '请选择您的主类'+
-                                        '</div>'+
-                                        '<div class="rightOne" style="height: 80%;">'+
-                                            '<div class="slideRight"></div>'+
-                                        '</div>'+
-                                        '<div class="clickThis">'+                             
-                                            '<div class="affirm">确定</div>'+
-                                        '</div>'+
-                                    '</div>'+
-                                '</div>'
-                        });
-                });
+        $(document).ready(function () {
+            getCategoryOption();
+            getSupplierOption();
         });
-        //一级类名点击事件
-        var index = 0;
-        var zhuId;
-        var sid = 0;
-        $("body").delegate(".mainclassOne","click",function(){
-            modifyTitle = this;
-            index = $(this).index();
-            $(".mainclassOne").eq(index).addClass("pictUp").siblings().removeClass("pictUp");//siblings 除自己以外的同级元素
-             /*if(index == -1){
-                $(".mainclassOne").eq(0).addClass("pictUp").siblings().removeClass("pictUp");
-            }*/
-           $(".choice").css("display","none");
-            $(".rightOne").css("display","block");
-           // $(".subclassOne").removeClass("selected");
-            //mainId = $(modifyTitle).children()[1].id;       //获取span的id 修改里面的值
-            //mainclass = true;
-            zhuId = $(this)[0].id;   //主类id                    
-            $(".subclassOne").remove();
-            subClass();
-        });
-       //查询子类
-        function subClass(){
+        //初始化产品类别 operation 选项
+        function getCategoryOption() {
+            // 请求
             $.ajax({
-                url: common.address + "product/selectCategoryB",
-                method: "POST",
-                data: { "sessionid":  $.cookie("sessionid")
-                ,"productCategoryId": zhuId },
-                success: (res)=>{
-                    var mess = "";
-                    $.each(res,function(n,value){
-                        sid ++;
-                        var mm = "";
-                        mm += "<div class='subclassOne' id='" + value.id + "'>" +
-                                "<h4>" + value.category + "</h4>" +
-                               "</div>";
-                        mess += mm;
+                type:'POST',
+                url:  common.address + 'product/selectCategory',
+                data: {
+                    "sessionid": $.cookie("sessionid")
+                },
+                success:function(response){
+                    var data=response.data;
+                    var content='<option value=""></option>';
+                    $.each(data,function(index,value){
+                        content+="<option value="+value.id+">"+value.category+"</option>";
                     });
-                    $(".slideRight").append(mess)
+                    $('#productCategoryId').append(content);
+                    form.render('select');
                 }
             })
         }
-        //二级类名点击事件   这边有一个bug  第一次选择了 没有点确认  第二次可以直接点确认选择的是上一次选择的结果
-        var group;
-        var typeText;
-        $("body").delegate(".subclassOne","click",function(e){
-            typeText = $(this).find("h4").text();
-            group = $(this)[0].id;           
-            $("#"+group).addClass("selected").siblings().removeClass("selected");
-        });
+
+            //初始化供应商 operation 选项
+            function getSupplierOption() {
+                // 请求
+                $.ajax({
+                    type:'POST',
+                    url:  common.address + 'purchase/selectPurchaseSupplier',
+                    data: {
+                        "sessionid": $.cookie("sessionid")
+                    },
+                    success:function(response){
+                        var data=response.data;
+                        console.log(JSON.stringify(data));
+                        var content='<option value=""></option>';
+                          $.each(data,function(index,value){
+                              content+="<option value="+value.id+">"+value.name+"</option>";
+                          });
+                          $('#productSupplier').append(content);
+                          form.render('select');
+                    }
+                })
+            }
 
 
-        //类别确认
-        $("body").delegate(".affirm","click",function(){
-            layer.close(layerindex);
-            $(".cplx input[name='productCategory']").val(typeText);
-            $(".cplx input[name='productCategoryBid']").val(group);
-        })
-        //产品保存
+
+            //产品保存
         $(".save").click(function(){
             //关闭当前页面
             //top.layui.element.tabDelete('admin-tab', '12');
             var data = form.val("example");
-            alert(JSON.stringify(data));
             var dataObj = new FormData();
             dataObj.append("json",JSON.stringify(data));
-            alert(JSON.stringify(data));
-            $.ajax({
+           $.ajax({
                 url: common.address +  "product/insertProduct?sessionid=" +  $.cookie("sessionid"),
                 type: "POST",
                 data:dataObj,

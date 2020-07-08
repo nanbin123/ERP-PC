@@ -1,9 +1,15 @@
 var navs = [{
 	"title": "采购管理",
-	"icon": "fa-cubes",
+	"icon": "fa fa-cube",
 	"spread": false,
 	"globalTabIdIndex":100,
 	"children": [{
+		"title": "供应商管理",
+		"href": "page/purchase/supplier.html",
+		"spread": false,
+		"globalTabIdIndex": 180
+	}
+	/*,{
 		"title": "导入订单",
 		"icon": "&#xe641;",
 		"href": "button.html",
@@ -43,10 +49,10 @@ var navs = [{
 		"icon": "&#xe60c;",
 		"href": "auxiliar.html",
 		"globalTabIdIndex":9
-	}]
+	}*/]
 }, {
 	"title": "客户管理",
-	"icon": "fa-cogs",
+	"icon": "fa fa-user",
 	"spread": false,
 	"globalTabIdIndex":300,
 	"children": [{
@@ -72,28 +78,25 @@ var navs = [{
 	}]
 }, {
 	"title": "产品管理",
-	"icon": "fa-cogs",
+	"icon": "fa fa-cubes",
 	"spread": false,
 	"globalTabIdIndex":200,
 	"children": [{
 		"title": "产品查询",
-		"icon": "fa-table",
-		"href": "page/product/testTableNest.html",
+		"href": "page/product/productList.html",
 		"globalTabIdIndex": 11
 	}, {
 		"title": "创建产品",
-		"icon": "fa-navicon",
 		"href": "page/product/createProduct.html",
 		"globalTabIdIndex": 12
-	}, {
-		"title": "创建品类",
-		"icon": "fa-navicon",
+	},{
+		"title": "分类管理",
 		"href": "page/product/category.html",
 		"globalTabIdIndex": 13
 	}]
 }, {
 	"title": "财务管理",
-	"icon": "fa-cogs",
+	"icon": "fa fa-money",
 	"spread": false,
 	"globalTabIdIndex":300,
 	"children": [{
@@ -113,4 +116,4 @@ var navs = [{
 		"href": "page/authorization/authorization.html",
 		"spread": false,
 		"globalTabIdIndex": 17
-	}];
+}];

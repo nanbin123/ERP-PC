@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../plugins-2.5.5/layui/css/layui.css" media="all" />
+    <title>添加供应商</title>
+</head>
+<style>
+    .layui-form-item .layui-inline{
+        margin-bottom: 15px;
+    }
+
+</style>
+<body>
+<div class="layui-form" id="LAY-form-supplier" style="padding: 20px 0 0 0">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">供应商名称:</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" placeholder="请输入供应商名称" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">供应商地址:</label>
+            <div class="layui-input-inline">
+                <input type="text" name="address" placeholder="请输入供应商地址" class="layui-input">
+        </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">联系人:</label>
+            <div class="layui-input-inline">
+                <input type="text" name="contacts" placeholder="请输入联系人" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">电话:</label>
+            <div class="layui-input-inline">
+                <input type="text" name="telephone" placeholder="请输入电话" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">手机:</label>
+            <div class="layui-input-inline">
+                <input type="text" name="phone" placeholder="请输入手机" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item  layui-form-text">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <textarea name="remark" placeholder="请输入备注信息" class="layui-textarea" style="width: 87%"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item  layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-supplier-front-submit" id="LAY-supplier-front-submit" value="确认">
+    </div>
+
+</div>
+
+<script type="text/javascript" src="../../plugins-2.5.5/layui/layui.js"></script>
+
+
+<script>
+    layui.config({//自定义模块路径
+        base: '../../js/'
+    })
+    layui.use(['form'], function() {
+
+    })
+</script>
+
+</body>
+</html>
